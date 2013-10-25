@@ -10,15 +10,19 @@ To setup the code:
 
 ```
 export SCRAM_ARCH=slc5_amd64_gcc434
-scram p -n CMSSW_4_4_4_nTuple_v9a CMSSW_4_4_4
-cd CMSSW_4_4_4_nTuple_v9a/src
+cmsrel CMSSW_4_4_5
+scram p -n CMSSW_4_4_5_nTuple_v9a CMSSW_4_4_5
+cd CMSSW_4_4_5_nTuple_v9a/src
 cmsenv
+
 #PAT recipe
-addpkg DataFormats/PatCandidates V06-05-01
-addpkg PhysicsTools/PatAlgos     V08-07-47
+#https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuidePATReleaseNotes44X#
+addpkg DataFormats/PatCandidates V06-04-40
+addpkg PhysicsTools/PatAlgos     V08-07-53
 addpkg PhysicsTools/PatUtils     V03-09-18-03
 addpkg CommonTools/ParticleFlow  V00-03-05-10
-addpkg FWCore/GuiBrowsers        V00-00-60
+addpkg FWCore/GuiBrowsers        V00-00-70
+addpkg DataFormats/CaloRecHit      V02-05-11
 
 #MET Analysis
 addpkg JetMETCorrections/Type1MET V04-05-08
@@ -26,8 +30,9 @@ addpkg PhysicsTools/PatUtils b4_2_X_cvMEtCorr_13Feb2012_JEC11V12
 addpkg DataFormats/METReco V03-03-07
 
 #MET Filters
-addpkg DataFormats/METReco lhx_12JAN2012_v1
-addpkg RecoMET/METFilters lhx_14APR2012_v1
+#https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFilters#
+cvs co -r lhx_12JAN2012_v1 DataFormats/METReco
+cvs co -r V00-00-07 RecoMET/METFilters
 cvs co -r V00-00-08 RecoMET/METAnalyzers
 
 #still needed for 3D Lumi reweighting

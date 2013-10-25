@@ -55,6 +55,24 @@ options.register ('useGSFelectrons',
                   VarParsing.varType.bool,
                   "Use GSF instead of PF electrons in PAT")
 
+options.register ('setupMETmanually',
+                  False,
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.bool,
+                  "Alternative way of setting up PFMET with PF2PAT (see python/MET_Setup_cff.py)")
+ 
+options.register ('applyType0METcorrection',
+                  False,
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.bool,
+                  "Apply type0 MET correction")
+ 
+options.register ('applySysShiftCorrection',
+                  False,
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.bool,
+                  "Apply x/y Shift Correction (for phi modulation)")
+
 options.register ('writeIsolatedPFLeptons',
                   True,
                   VarParsing.multiplicity.singleton,
@@ -208,7 +226,7 @@ setup_PF2PAT(process, cms, options, postfix=postfix, removeTausFromJetCollection
 setup_looseLeptons(process, cms, options, postfix=postfix, maxLooseLeptonRelIso=maxLooseLeptonRelIso)
 #MET
 from BristolAnalysis.NTupleTools.MET_Setup_cff import *
-if options.CMSSW == '44X':
+if options.setupMETmanually:
     setup_MET_manually(process, cms, options, postfix=postfix)
 else:
     setup_MET(process, cms, options, postfix=postfix)
