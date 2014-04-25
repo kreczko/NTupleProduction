@@ -3,6 +3,7 @@
 <use name="FWCore/ParameterSet"/>
 <use name="CommonTools/UtilAlgos"/>
 <use name="DataFormats/PatCandidates"/>
+<use name="AnalysisDataFormats/TopObjects"/>
 <use name="RecoEcal/EgammaClusterAlgos"/>
 <use name="RecoEgamma/EgammaTools"/>
 <use name="RecoEgamma/EgammaIsolationAlgos"/>

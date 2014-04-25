@@ -92,12 +92,19 @@ double getRelativeIsolation(const pat::Electron& electron, double cone, double r
 	//code from: https://twiki.cern.ch/twiki/bin/view/CMS/PfIsolation
 	float AEff = 0.00;
 	//so far this is only for 0.3. 0.4 is available but not 0.5
-	if (isRealData) {
+
+// 	  std::cout << "ElectronEffectiveArea::kEleEAData2011: " << ElectronEffectiveArea::kEleEAData2011 << std::endl;
+//        std::cout << "ElectronEffectiveArea::kEleEAData2012: " << ElectronEffectiveArea::kEleEAData2012<< std::endl;
+
+//        std::cout << "ElectronEffectiveArea::kEleEAFall1MC: " << ElectronEffectiveArea::kEleEAFall11MC << std::endl;
+//        std::cout << "ElectronEffectiveArea::kEleEASummer12MC: " << ElectronEffectiveArea::kEleEASummer12MC<< std::endl;
+
+        if (isRealData) {
 		AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03,
-				electron.superCluster()->eta(), ElectronEffectiveArea::kEleEAData2011);
-	} else {
+				electron.superCluster()->eta(), ElectronEffectiveArea::kEleEAData2012);
+        } else {
 		AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03,
-				electron.superCluster()->eta(), ElectronEffectiveArea::kEleEAFall11MC);
+				electron.superCluster()->eta(), ElectronEffectiveArea::kEleEAData2012);
 	}
 
 	AbsVetos vetos_ch;
@@ -121,22 +128,37 @@ double getRelativeIsolation(const pat::Electron& electron, double cone, double r
 	const double relIso = (chIso + nhIso + phIso) / electron.pt();
 	const double relIsodb = (chIso + max(0.0, nhIso + phIso - 0.5 * puChIso)) / electron.pt();
 	const double relIsorho = (chIso + max(0.0, nhIso + phIso - rho * AEff)) / electron.pt();
-
-	if (useDeltaBetaCorrections)
-		return relIsodb;
+	
 	if (useRhoActiveAreaCorrections)
 		return relIsorho;
+	
+	if (useDeltaBetaCorrections)
+		return relIsodb;
+	
 
 	return relIso;
 }
 
 double getRelativeIsolation(const pat::Muon& muon, double cone, bool useDeltaBetaCorrections) {
-	const double chIso = muon.isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(cone).first;
-	const double nhIso = muon.isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(cone).first;
-	const double phIso = muon.isoDeposit(pat::PfGammaIso)->depositAndCountWithin(cone).first;
-
-	const double puChIso = muon.isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.4).first;
-
+	double chIso = 0;
+	double nhIso = 0; 
+	double phIso = 0;
+	double puChIso = 0;
+	
+	if(cone==0.3){
+ 	chIso = muon.pfIsolationR03().sumChargedHadronPt;
+ 	nhIso = muon.pfIsolationR03().sumNeutralHadronEt;
+ 	phIso = muon.pfIsolationR03().sumPhotonEt;
+	puChIso = muon.pfIsolationR03().sumPUPt;
+	}else{
+	chIso = muon.pfIsolationR04().sumChargedHadronPt;
+ 	nhIso = muon.pfIsolationR04().sumNeutralHadronEt;
+ 	phIso = muon.pfIsolationR04().sumPhotonEt;
+	puChIso = muon.pfIsolationR04().sumPUPt;
+	
+	}
+	
+	
 	const double relIso = (chIso + nhIso + phIso) / muon.pt();
 	const double relIsodb = (chIso + max(0.0, nhIso + phIso - 0.5 * puChIso)) / muon.pt();
 
@@ -145,3 +167,88 @@ double getRelativeIsolation(const pat::Muon& muon, double cone, bool useDeltaBet
 
 	return relIso;
 }
+
+double getSmearedJetPtScale(const pat::Jet& jet, int jet_smearing_systematic) {
+	// Get the jet energy resolution scale factors, depending on the jet eta, from 
+	// https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution#Recommendations_for_7_and_8_TeV
+	
+				
+	//Jeson's smeary code:
+	double scaleFactor(0.);
+	if (fabs(jet.eta()) >= 0.0 && fabs(jet.eta()) < 0.5) {
+		switch (jet_smearing_systematic) {
+			case -1:
+				scaleFactor = 1.052-0.061;
+				break;
+			case 1:
+				scaleFactor = 1.052+0.062;
+				break;
+			default:
+				scaleFactor = 1.052;
+		}
+	}
+	if (fabs(jet.eta()) >= 0.5 && fabs(jet.eta()) < 1.1) {
+		switch (jet_smearing_systematic) {
+			case -1:
+				scaleFactor = 1.057-0.055;
+				break;
+			case 1:
+				scaleFactor = 1.057+0.056;
+				break;
+			default:
+				scaleFactor = 1.057;
+		}
+	}
+	if (fabs(jet.eta()) >= 1.1 && fabs(jet.eta()) < 1.7) {
+		switch (jet_smearing_systematic) {
+			case -1:
+				scaleFactor = 1.096-0.062;
+				break;
+			case 1:
+				scaleFactor = 1.096+0.063;
+				break;
+			default:
+				scaleFactor = 1.096;
+		}
+	}
+	if (fabs(jet.eta()) >= 1.7 && fabs(jet.eta()) < 2.3) {
+		switch (jet_smearing_systematic) {
+			case -1:
+				scaleFactor = 1.134-0.085;
+				break;
+			case 1:
+				scaleFactor = 1.134+0.087;
+				break;
+			default:
+				scaleFactor = 1.134;
+		}
+	}
+	if (fabs(jet.eta()) >= 2.3 && fabs(jet.eta()) < 5.0) {
+		switch (jet_smearing_systematic) {
+			case -1:
+				scaleFactor = 0.153;
+				break;
+			case 1:
+				scaleFactor = 0.155;
+				break;
+			default:
+				scaleFactor = 1.288;
+		}
+	}
+	
+	//use raw scaleFactors from above to calculate the final factors to apply
+	double matchedGeneratedJetpt = jet.pt();
+	if(jet.genJet()){
+	matchedGeneratedJetpt = jet.genJet()->pt();
+	}
+	double jetPt = jet.pt();
+	double factor = 1-scaleFactor;
+	double deltaPt = factor * (jetPt - matchedGeneratedJetpt);
+	double ptScale = std::max(0.0, ((jetPt + deltaPt)/jetPt));
+	
+	return ptScale;
+
+}
+
+
+

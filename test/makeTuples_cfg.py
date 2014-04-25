@@ -4,7 +4,7 @@ from BristolAnalysis.NTupleTools.NTupleTools_cff import *
 if not makePATTuple:
     #NTuple content
     from BristolAnalysis.NTupleTools.NTupler_cff import *
-    setup_ntupler(process, cms, options, includeCA08Jets)
+    setup_ntupler(process, cms, options, includeCA08Jets = False)
 else:
     from BristolAnalysis.NTupleTools.PatTuple_cff import *
     setup_pattuple(process, cms, options)
@@ -53,7 +53,6 @@ process.makingNTuples = cms.Path(
                       process.pdfWeights * 
                       process.hlTrigReport * 
                       process.egammaIDLikelihood * 
-                      process.pfMEtSysShiftCorrSequence * 
                       process.patseq * 
                       getattr(process, "producePatPFMETCorrections" + postfix) * 
                       getattr(process, "patMETs" + postfix) * 
@@ -63,7 +62,7 @@ process.makingNTuples = cms.Path(
                       process.rootNTuples
                       )
 
-if not options.setupMETmanually:
+if not options.CMSSW == '44X':
     process.makingNTuples.remove(getattr(process, "producePatPFMETCorrections" + postfix))
     process.makingNTuples.remove(getattr(process, "patMETs" + postfix))
 

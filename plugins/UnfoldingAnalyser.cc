@@ -204,7 +204,9 @@ void UnfoldingAnalyser::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	bool is_semileptonic_muon(passesFilter(iEvent, is_semileptonic_muon_flag_));
 	is_semileptonic_ = is_semileptonic_tau || is_semileptonic_electron || is_semileptonic_muon;
 
-	float gen_variable(get_gen_variable(iEvent));
+	float gen_variable(0);
+	if (is_semileptonic_electron || is_semileptonic_muon || is_semileptonic_tau)
+		gen_variable = get_gen_variable(iEvent);
 
 	if (do_electron_channel_) {
 		if (is_semileptonic_electron) {

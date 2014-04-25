@@ -8,20 +8,9 @@ def setup_MET(process, cms, options, postfix="PFlow"):
     process.patPFMet.addGenMET = cms.bool(not options.useData)
     
     process.load("JetMETCorrections.Type1MET.pfMETCorrections_cff")
-    process.load("JetMETCorrections.Type1MET.pfMETsysShiftCorrections_cfi")
+#    process.load("JetMETCorrections.Type1MET.pfMETsysShiftCorrections_cfi")
     
     setup_MET_uncertainties(process, cms, options, postfix)
-    
-        
-    if options.applyType0METcorrection:
-        getattr(process, 'patType1CorrectedPFMet' + postfix).srcType1Corrections = cms.VInputTag(
-                cms.InputTag("patPFJetMETtype1p2Corr" + postfix, "type1"),
-                cms.InputTag("patPFMETtype0Corr" + postfix)
-                )
-        getattr(process, 'patType1p2CorrectedPFMet' + postfix).srcType1Corrections = cms.VInputTag(
-                cms.InputTag("patPFJetMETtype1p2Corr" + postfix, "type1"),
-                cms.InputTag("patPFMETtype0Corr" + postfix)
-                )
     
     #these flags are false for '+postfix' mets by default, but true for non-postfix ones!
     getattr(process,'patPFJetMETtype1p2Corr'+postfix).skipEM = cms.bool(False)
@@ -44,23 +33,13 @@ def setup_MET_manually(process, cms, options, postfix="PFlow"):
     getattr(process,'pfCandMETcorr'+postfix).src = cms.InputTag('pfNoJet'+postfix)
     getattr(process,'patPFJetMETtype1p2Corr'+postfix).type1JetPtThreshold = cms.double(10.0)
             
-    if options.applyType0METcorrection:
-        getattr(process, 'patType1CorrectedPFMet' + postfix).srcType1Corrections = cms.VInputTag(
-                            cms.InputTag("patPFJetMETtype1p2Corr" + postfix, "type1"),
-                            cms.InputTag("patPFMETtype0Corr" + postfix)
+    getattr(process,'patType1CorrectedPFMet'+postfix).srcType1Corrections = cms.VInputTag(
+                            cms.InputTag("patPFJetMETtype1p2Corr"+postfix,"type1"),
                             )
-        getattr(process, 'patType1p2CorrectedPFMet' + postfix).srcType1Corrections = cms.VInputTag(
-                            cms.InputTag("patPFJetMETtype1p2Corr" + postfix, "type1"),
-                            cms.InputTag("patPFMETtype0Corr" + postfix)
+    getattr(process,'patType1p2CorrectedPFMet'+postfix).srcType1Corrections = cms.VInputTag(
+                            cms.InputTag("patPFJetMETtype1p2Corr"+postfix,"type1"),
                             )
-    else:
-        getattr(process, 'patType1CorrectedPFMet' + postfix).srcType1Corrections = cms.VInputTag(
-                            cms.InputTag("patPFJetMETtype1p2Corr" + postfix, "type1"),
-                            )
-        getattr(process, 'patType1p2CorrectedPFMet' + postfix).srcType1Corrections = cms.VInputTag(
-                            cms.InputTag("patPFJetMETtype1p2Corr" + postfix, "type1"),
-                            )
-           
+            
     getattr(process,'patPFJetMETtype1p2Corr'+postfix).skipEM = cms.bool(False)
     getattr(process,'patPFJetMETtype1p2Corr'+postfix).skipMuons = cms.bool(False)
     getattr(process,'patPFJetMETtype2Corr'+postfix).skipEM = cms.bool(False)
@@ -79,7 +58,7 @@ def setup_MET_manually(process, cms, options, postfix="PFlow"):
     process.patPFMet.addGenMET = cms.bool(not options.useData)
     
     process.load("JetMETCorrections.Type1MET.pfMETCorrections_cff")
-    process.load("JetMETCorrections.Type1MET.pfMETsysShiftCorrections_cfi") 
+#    process.load("JetMETCorrections.Type1MET.pfMETsysShiftCorrections_cfi")
     
     #these flags are false for '+postfix' mets by default, but true for non-postfix ones!
     getattr(process,'patPFJetMETtype1p2Corr'+postfix).skipEM = cms.bool(False)
@@ -103,13 +82,12 @@ def setup_MET_uncertainties(process, cms, options, postfix="PFlow"):
                     jetCollection = cms.InputTag('goodPatJetsPFlow'),
                     jetCorrLabel = inputJetCorrLabelForMETuncertainties,
                     doSmearJets = not options.useData,
-                    makeType1corrPFMEt = True,
-                    makeType1p2corrPFMEt = True,
-                    makePFMEtByMVA = False,
-                    makeNoPileUpPFMEt = False,
-                    doApplyType0corr = options.applyType0METcorrection,
+#                    makeType1corrPFMEt = True,
+#                    makeType1p2corrPFMEt = True,
+#                    makePFMEtByMVA = False,
+#                    makeNoPileUpPFMEt = False,
+#                    doApplyType0corr = options.applyType0METcorrection,
 #                    sysShiftCorrParameter = process.pfMEtSysShiftCorrParameters_2012runAvsNvtx_data,
-                    sysShiftCorrParameter = process.pfMEtSysShiftCorrParameters_2011runAplusBvsNvtx_data,
-                    doApplySysShiftCorr = options.applySysShiftCorrection,
+#                    doApplySysShiftCorr = options.applySysShiftCorrection,
                     addToPatDefaultSequence=False
                     )

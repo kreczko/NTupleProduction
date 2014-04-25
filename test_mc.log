@@ -1,0 +1,7 @@
+----- Begin Fatal Exception 09-Apr-2014 16:01:50 BST-----------------------
+An exception of category 'ConfigFileReadError' occurred while
+   [0] Processing the python configuration file named BristolAnalysis/NTupleTools/test/unfoldingAndCutflow_cfg.py
+Exception Message:
+python encountered the error: <type 'exceptions.IOError'>
+[Errno 2] No such file or directory: 'BristolAnalysis/NTupleTools/test/unfoldingAndCutflow_cfg.py'
+----- End Fatal Exception -------------------------------------------------
