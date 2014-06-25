@@ -8,12 +8,12 @@ from PhysicsTools.PatAlgos.tools.coreTools import *
 #set up analysis
 
 #use jet energy correction from database (loaded from BristolAnalysis/NTupleTools/python_custom_JEC_cff.py)
-#==False -> use JEC from Global Tag 
+#==False -> use JEC from Global Tag
 USE_JEC_FROM_DB = False
 #if 'False' taus are included in the jet collections
 removeTausFromJetCollection = False
 #if remove eles from gen jets
-excludeElectronsFromWsFromGenJets = True	
+excludeElectronsFromWsFromGenJets = True
 
 #maximal relative isolation for loose leptons
 maxLooseLeptonRelIso = 999.0
@@ -164,8 +164,8 @@ options.register ('skipEvents',
                   VarParsing.multiplicity.singleton,
                   VarParsing.varType.int,
                   "Number of events to skip (0 for none)")
-			       
-#CMSSW 44X can't compile this file in the python directory correctly 
+
+#CMSSW 44X can't compile this file in the python directory correctly
 #as it fails to identify the file ending. This hack helps.
 import sys
 hasCorrectEnding = False
@@ -231,7 +231,7 @@ if USE_JEC_FROM_DB:
     else:
         database = 'BristolAnalysis/NTupleTools/data/JEC/Summer12_V3_MC.db'
         configureCustomJEC_MC(process, cms, database)
-    
+
 if not options.useData :
     process.source.fileNames = [
             TEST_MC_FILE
@@ -245,7 +245,7 @@ else:
 #process.source.lumisToProcess = LumiList.LumiList(filename = 'BristolAnalysis/NTupleTools/data/CertifiedJSONs/Cert_190456-208686_8TeV_22Jan2013ReReco_Collisions12_JSON.txt').getVLuminosityBlockRange()
 # Use eventsToSkip to specify events which you do not want to process when running locally.
 #process.source.eventsToSkip = cms.untracked.VEventRange('193336:280110630')
-    
+
 # add the flavor history
 process.load("PhysicsTools.HepMCCandAlgos.flavorHistoryPaths_cfi")
 
@@ -257,9 +257,9 @@ if options.useData :
 else :
         process.GlobalTag.globaltag = cms.string(GLOBALTAG_MC)
 
-        
+
 from PhysicsTools.SelectorUtils.pvSelector_cfi import pvSelector
-    
+
 process.goodOfflinePrimaryVertices = cms.EDFilter(
   "PrimaryVertexObjectFilter",
   filterParams=cms.PSet(
@@ -303,36 +303,36 @@ process.patElectronsLoosePFlow.pfElectronSource = cms.InputTag("pfIsolatedElectr
 if options.useData :
     removeMCMatching(process, ['All'])
     process.looseLeptonSequence.remove(process.muonMatchLoosePFlow)
-    
+
 if not options.useData :
     ## needed for redoing the ak5GenJets
-    process.load("BristolAnalysis.NTupleTools.GenJetParticles_cfi")
+    #process.load("BristolAnalysis.NTupleTools.GenJetParticles_cfi")
     process.load("RecoJets.Configuration.RecoGenJets_cff")
     #exclude the following particles with ids below from the gen jets electron had to be added, the rest are default
     if excludeElectronsFromWsFromGenJets :
         process.genParticlesForJetsNoNu.excludeFromResonancePids = [11, 12, 13, 14, 16]
 
 process.patseq = cms.Sequence(
-#    process.HBHENoiseFilter * 
-    process.goodOfflinePrimaryVertices * 
+#    process.HBHENoiseFilter *
+    process.goodOfflinePrimaryVertices *
     process.eidMVASequence *
     process.genParticlesForJetsNoNu *
-    getattr(process, "patPF2PATSequence" + postfix) * 
-    process.looseLeptonSequence * 
-    #process.patDefaultSequence * 
-    #process.goodPatJets * 
-    process.goodPatJetsPFlow * 
-    process.metUncertaintySequence * 
-    process.EventFilters * 
-    process.flavorHistorySeq 
+    getattr(process, "patPF2PATSequence" + postfix) *
+    process.looseLeptonSequence *
+    #process.patDefaultSequence *
+    #process.goodPatJets *
+    process.goodPatJetsPFlow *
+    process.metUncertaintySequence *
+    process.EventFilters *
+    process.flavorHistorySeq
     )
 
 if options.useData:
     process.patseq.remove(process.genParticlesForJetsNoNu)
-    process.patseq.remove(process.genJetParticles)    
+    process.patseq.remove(process.genJetParticles)
     process.patseq.remove(process.flavorHistorySeq)
     process.patseq.remove(process.genParticlesForJets)
-        
+
 # remove flavour history as it has problems with the MC@NLO genparticles
 if options.isMCatNLO:
     process.patseq.remove(process.flavorHistorySeq)
@@ -393,12 +393,12 @@ else :
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
 
 #----------------------------------------------------------------------------------------------------
-# The ECAL laser correction filter (ecalLaserCorrFilter) occasionally 
+# The ECAL laser correction filter (ecalLaserCorrFilter) occasionally
 # interpolates laser correction values of < 1 and issues a LogError message
-# 
-# This does not affect the laser correction that is applied: only the interpolated estimate 
+#
+# This does not affect the laser correction that is applied: only the interpolated estimate
 # that the filter uses.  The filter runs in "Tagging Mode", so no events can be removed.
-# 
+#
 # Error message comes from line 173 of:
 # CalibCalorimetry/EcalLaserCorrection/src/EcalLaserDbService.cc
 # function = EcalLaserDbService::getLaserCorrection
@@ -406,16 +406,16 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
 #
 # We suppress these messages.  Suppression can be removed by commenting the following line.
 #----------------------------------------------------------------------------------------------------
-process.MessageLogger.suppressError = cms.untracked.vstring ('ecalLaserCorrFilter') 
+process.MessageLogger.suppressError = cms.untracked.vstring ('ecalLaserCorrFilter')
 
 # process all the events
 if options.maxEvents:
     process.maxEvents.input = options.maxEvents
 else:
     process.maxEvents.input = 100
-    
+
 process.source.skipEvents = cms.untracked.uint32(options.skipEvents)
-    
+
 process.options.wantSummary = True
 process.out.dropMetaData = cms.untracked.string("DROPPED")
 process.source.inputCommands = cms.untracked.vstring("keep *", "drop *_MEtoEDMConverter_*_*")
