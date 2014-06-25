@@ -19,14 +19,14 @@ BristolNTuple_Trigger::BristolNTuple_Trigger(const edm::ParameterSet& iConfig) :
 		prefix(iConfig.getParameter < std::string > ("Prefix")), //
 		suffix(iConfig.getParameter < std::string > ("Suffix")) {
 
-	produces < std::vector<int> > (prefix + "L1PhysBits" + suffix);
-	produces < std::vector<int> > (prefix + "L1TechBits" + suffix);
-	produces < std::vector<int> > (prefix + "HLTBits" + suffix);
-	produces < std::vector<int> > (prefix + "HLTResults" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "L1PhysBits" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "L1TechBits" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "HLTBits" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "HLTResults" + suffix);
 	produces < std::vector<std::string> > (prefix + "HLTNames" + suffix);
-	produces < std::vector<int> > (prefix + "HLTPrescales" + suffix);
-	produces < std::vector<int> > (prefix + "HLTResultsOther" + suffix);
-	produces < std::vector<int> > (prefix + "HLTPrescalesOther" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "HLTPrescales" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "HLTResultsOther" + suffix);
+	produces < std::vector<unsigned int> > (prefix + "HLTPrescalesOther" + suffix);
 }
 
 void BristolNTuple_Trigger::beginRun(edm::Run& iRun, const edm::EventSetup& iSetup) {
@@ -47,14 +47,14 @@ void BristolNTuple_Trigger::beginRun(edm::Run& iRun, const edm::EventSetup& iSet
 
 void BristolNTuple_Trigger::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-	std::auto_ptr < std::vector<int> > l1physbits(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > l1techbits(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > hltbits(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > hltresults(new std::vector<int>());
+	std::auto_ptr < std::vector<unsigned int> > l1physbits(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > l1techbits(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > hltbits(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > hltresults(new std::vector<unsigned int>());
 	std::auto_ptr < std::vector<std::string> > hltnames(new std::vector<std::string>());
-	std::auto_ptr < std::vector<int> > hltprescales(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > hltresults_other(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > hltprescales_other(new std::vector<int>());
+	std::auto_ptr < std::vector<unsigned int> > hltprescales(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > hltresults_other(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > hltprescales_other(new std::vector<unsigned int>());
 
 	//-----------------------------------------------------------------
 	edm::Handle < L1GlobalTriggerReadoutRecord > l1GtReadoutRecord;
@@ -161,4 +161,3 @@ void BristolNTuple_Trigger::produce(edm::Event& iEvent, const edm::EventSetup& i
 //
 //	return found;
 //}
-

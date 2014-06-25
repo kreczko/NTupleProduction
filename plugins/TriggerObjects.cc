@@ -21,10 +21,10 @@ BristolNTuple_TriggerObjects::BristolNTuple_TriggerObjects(const edm::ParameterS
 		prefix(iConfig.getParameter < std::string > ("Prefix")), //
 		suffix(iConfig.getParameter < std::string > ("Suffix")) {
 
-	produces <std::vector<double> > ( prefix + "Px" + suffix );
-	produces <std::vector<double> > ( prefix + "Py" + suffix );
-	produces <std::vector<double> > ( prefix + "Pz" + suffix );
-        produces <std::vector<double> > ( prefix + "Energy" + suffix );
+	produces <std::vector<float> > ( prefix + "Px" + suffix );
+	produces <std::vector<float> > ( prefix + "Py" + suffix );
+	produces <std::vector<float> > ( prefix + "Pz" + suffix );
+        produces <std::vector<float> > ( prefix + "Energy" + suffix );
 }
 
 void BristolNTuple_TriggerObjects::beginRun(edm::Run& iRun, const edm::EventSetup& iSetup) {
@@ -45,10 +45,10 @@ void BristolNTuple_TriggerObjects::beginRun(edm::Run& iRun, const edm::EventSetu
 
 void BristolNTuple_TriggerObjects::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-	std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > E(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > E(new std::vector<float>());
 
 	//-----------------------------------------------------------------
 	// open the trigger summary to retrieve trigger objects of interest
@@ -61,7 +61,7 @@ void BristolNTuple_TriggerObjects::produce(edm::Event& iEvent, const edm::EventS
 		// trigger object we want to match
 		size_t filterIndex = (*triggerObjectsSummary).filterIndex(hltObjectOfInterest);
 		trigger::TriggerObjectCollection allTriggerObjects = triggerObjectsSummary->getObjects();
-		if (filterIndex < (*triggerObjectsSummary).sizeFilters()) { //check if the trigger object is present 
+		if (filterIndex < (*triggerObjectsSummary).sizeFilters()) { //check if the trigger object is present
 			const trigger::Keys &keys = (*triggerObjectsSummary).filterKeys(filterIndex);
 			for (size_t j = 0; j < keys.size(); j++) {
 				trigger::TriggerObject foundObject = (allTriggerObjects)[keys[j]];
@@ -86,5 +86,3 @@ void BristolNTuple_TriggerObjects::produce(edm::Event& iEvent, const edm::EventS
 	iEvent.put(pz, prefix + "Pz" + suffix);
         iEvent.put(E, prefix + "Energy" + suffix);
 }
-
-

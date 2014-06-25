@@ -10,9 +10,9 @@ BristolNTuple_METcorrections::BristolNTuple_METcorrections(const edm::ParameterS
         prefix(iConfig.getParameter < std::string > ("Prefix")), //
         suffix(iConfig.getParameter < std::string > ("Suffix"))
 {
-        produces<double>(prefix + "x" + suffix);
-        produces<double>(prefix + "y" + suffix);
-        //      produces<double>(prefix + "sumet" + suffix);
+        produces<float>(prefix + "x" + suffix);
+        produces<float>(prefix + "y" + suffix);
+        //      produces<float>(prefix + "sumet" + suffix);
 }
 
 void BristolNTuple_METcorrections::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
@@ -24,9 +24,9 @@ void BristolNTuple_METcorrections::produce(edm::Event& iEvent, const edm::EventS
 
     //    std::cout << "Systematic shift corrections, corrx = " << metCorr->mex << ", corry = " << metCorr->mey << std::endl;
 
-    std::auto_ptr<double> corrx(new double(metCorr->mex));
-    std::auto_ptr<double> corry(new double(metCorr->mey));
-    //    std::auto_ptr<double> sumet(new double(metCorr->sumet));
+    std::auto_ptr<float> corrx(new float(metCorr->mex));
+    std::auto_ptr<float> corry(new float(metCorr->mey));
+    //    std::auto_ptr<float> sumet(new float(metCorr->sumet));
 
     iEvent.put(corrx, prefix + "x" + suffix);
     iEvent.put(corry, prefix + "y" + suffix);

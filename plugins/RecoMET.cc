@@ -9,11 +9,11 @@ BristolNTuple_RecoMET::BristolNTuple_RecoMET(const edm::ParameterSet& iConfig) :
 	prefix(iConfig.getParameter < std::string > ("Prefix")), //
 	suffix(iConfig.getParameter < std::string > ("Suffix"))
 {
-	produces<double>(prefix + "Ex" + suffix);
-	produces<double>(prefix + "Ey" + suffix);
-	produces<double>(prefix + "ET" + suffix);
-	produces<double>(prefix + "Phi" + suffix);
-	produces<double>(prefix + "Significance" + suffix);
+	produces<float>(prefix + "Ex" + suffix);
+	produces<float>(prefix + "Ey" + suffix);
+	produces<float>(prefix + "ET" + suffix);
+	produces<float>(prefix + "Phi" + suffix);
+	produces<float>(prefix + "Significance" + suffix);
 }
 
 void BristolNTuple_RecoMET::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
@@ -25,11 +25,11 @@ void BristolNTuple_RecoMET::produce(edm::Event& iEvent, const edm::EventSetup& i
 
     const reco::PFMET recoPFMET(recomets->at(0));
 
-    std::auto_ptr<double> px(new double(recoPFMET.px()));
-    std::auto_ptr<double> py(new double(recoPFMET.py()));
-    std::auto_ptr<double> met(new double(recoPFMET.pt()));
-    std::auto_ptr<double> phi(new double(recoPFMET.phi()));
-    std::auto_ptr<double> significance(new double(recoPFMET.significance()));
+    std::auto_ptr<float> px(new float(recoPFMET.px()));
+    std::auto_ptr<float> py(new float(recoPFMET.py()));
+    std::auto_ptr<float> met(new float(recoPFMET.pt()));
+    std::auto_ptr<float> phi(new float(recoPFMET.phi()));
+    std::auto_ptr<float> significance(new float(recoPFMET.significance()));
 
 	iEvent.put(px, prefix + "Ex" + suffix);
 	iEvent.put(py, prefix + "Ey" + suffix);

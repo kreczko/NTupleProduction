@@ -21,9 +21,9 @@ BristolNTuple_GenEventInfo::BristolNTuple_GenEventInfo(const edm::ParameterSet& 
 	produces<double>(prefix_ + "PtHat" + suffix_);
 	produces<double>(prefix_ + "PUWeight" + suffix_);
 	produces < std::vector<double> > (prefix_ + "PDFWeights" + suffix_);
-	produces < std::vector<int> > (prefix_ + "PileUpInteractions" + suffix_);
-	produces < std::vector<int> > (prefix_ + "NumberOfTrueInteractions" + suffix_);
-	produces < std::vector<int> > (prefix_ + "PileUpOriginBX" + suffix_);
+	produces < std::vector<unsigned int> > (prefix_ + "PileUpInteractions" + suffix_);
+	produces < std::vector<unsigned int> > (prefix_ + "NumberOfTrueInteractions" + suffix_);
+	produces < std::vector<unsigned int> > (prefix_ + "PileUpOriginBX" + suffix_);
 	produces<unsigned int>(prefix_ + "FlavourHistory" + suffix_);
 	produces<unsigned int>(prefix_ + "TtbarDecay" + suffix_);
 }
@@ -34,10 +34,10 @@ void BristolNTuple_GenEventInfo::produce(edm::Event& iEvent, const edm::EventSet
 	std::auto_ptr<double> ptHat(new double());
 	std::auto_ptr<double> PUWeight(new double());
 	std::auto_ptr < std::vector<double> > pdfWeights(new std::vector<double>());
-	std::auto_ptr < std::vector<int> > Number_interactions(new std::vector<int>());
+	std::auto_ptr < std::vector<unsigned int> > Number_interactions(new std::vector<unsigned int>());
 
-	std::auto_ptr < std::vector<int> > NumberOfTrueInteractions(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > OriginBX(new std::vector<int>());
+	std::auto_ptr < std::vector<unsigned int> > NumberOfTrueInteractions(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > OriginBX(new std::vector<int>());
 	std::auto_ptr<unsigned int> flavourHistory(new unsigned int());
 	std::auto_ptr<unsigned int> ttbarDecay(new unsigned int());
 

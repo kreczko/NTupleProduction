@@ -11,13 +11,13 @@ BristolNTuple_GlobalEventVars::BristolNTuple_GlobalEventVars(const edm::Paramete
 	suffix(iConfig.getParameter < std::string > ("Suffix")), //
 	channel(iConfig.getParameter < std::string > ("Channel"))
 {
-	produces<double>(prefix + "HT" + suffix);
-	produces<double>(prefix + "ST" + suffix);
-	produces<double>(prefix + "M3" + suffix);
-	produces<double>(prefix + "Mbl" + suffix);
-	produces<double>(prefix + "anglebl" + suffix);
-	produces<double>(prefix + "MT" + suffix);
-	produces<double>(prefix + "WPT" + suffix);
+	produces<float>(prefix + "HT" + suffix);
+	produces<float>(prefix + "ST" + suffix);
+	produces<float>(prefix + "M3" + suffix);
+	produces<float>(prefix + "Mbl" + suffix);
+	produces<float>(prefix + "anglebl" + suffix);
+	produces<float>(prefix + "MT" + suffix);
+	produces<float>(prefix + "WPT" + suffix);
 	produces<unsigned int>(prefix + "signalLeptonIndex" + suffix);
 	produces<unsigned int>(prefix + "numberOfBTags" + suffix);
 }
@@ -65,11 +65,11 @@ void BristolNTuple_GlobalEventVars::produce(edm::Event& iEvent, const edm::Event
 
 	const pat::MET patMET(mets->at(0));
 
-    std::auto_ptr<double> HT(new double( BristolNTuple_GlobalEventVars::HT(*jets) ));
-    std::auto_ptr<double> ST(new double( BristolNTuple_GlobalEventVars::ST(*jets, signalLepton, patMET) ));
-    std::auto_ptr<double> M3(new double( BristolNTuple_GlobalEventVars::M3(*jets) ));
-    std::auto_ptr<double> MT(new double( BristolNTuple_GlobalEventVars::MT(signalLepton, patMET) ));
-    std::auto_ptr<double> WPT(new double( BristolNTuple_GlobalEventVars::WPT(signalLepton, patMET) ));
+    std::auto_ptr<float> HT(new float( BristolNTuple_GlobalEventVars::HT(*jets) ));
+    std::auto_ptr<float> ST(new float( BristolNTuple_GlobalEventVars::ST(*jets, signalLepton, patMET) ));
+    std::auto_ptr<float> M3(new float( BristolNTuple_GlobalEventVars::M3(*jets) ));
+    std::auto_ptr<float> MT(new float( BristolNTuple_GlobalEventVars::MT(signalLepton, patMET) ));
+    std::auto_ptr<float> WPT(new float( BristolNTuple_GlobalEventVars::WPT(signalLepton, patMET) ));
 
     // Get subset of jets that are tagged as b jets
     std::vector<const pat::Jet*> b_jets;
@@ -79,8 +79,8 @@ void BristolNTuple_GlobalEventVars::produce(edm::Event& iEvent, const edm::Event
 		}
 	}
 
-    std::auto_ptr<double> Mbl(new double(-1));
-    std::auto_ptr<double> anglebl(new double(-1));
+    std::auto_ptr<float> Mbl(new float(-1));
+    std::auto_ptr<float> anglebl(new float(-1));
 
     // Get the b jet closest to the lepton
 	if (b_jets.size() != 0) {
@@ -104,8 +104,8 @@ void BristolNTuple_GlobalEventVars::produce(edm::Event& iEvent, const edm::Event
 
 }
 
-double BristolNTuple_GlobalEventVars::HT(const pat::JetCollection& jets) {
-	double ht(0);
+float BristolNTuple_GlobalEventVars::HT(const pat::JetCollection& jets) {
+	float ht(0);
 	//Take ALL the jets!
 	for (unsigned int index = 0; index < jets.size(); ++index) {
 		if(jets.at(index).pt() > 20)
@@ -114,14 +114,14 @@ double BristolNTuple_GlobalEventVars::HT(const pat::JetCollection& jets) {
 	return ht;
 }
 
-double BristolNTuple_GlobalEventVars::ST(const pat::JetCollection& jets, const TLorentzVector& lepton, const pat::MET& met) {
+float BristolNTuple_GlobalEventVars::ST(const pat::JetCollection& jets, const TLorentzVector& lepton, const pat::MET& met) {
 	// ST = HT + MET + lepton pt
-	double ht = BristolNTuple_GlobalEventVars::HT(jets);
+	float ht = BristolNTuple_GlobalEventVars::HT(jets);
 	return ht + met.et() + lepton.Pt();
 }
 
-double BristolNTuple_GlobalEventVars::M3(const pat::JetCollection& jets) {
-	double m3(0), max_pt(0);
+float BristolNTuple_GlobalEventVars::M3(const pat::JetCollection& jets) {
+	float m3(0), max_pt(0);
 	if (jets.size() >= 3) {
 		for (unsigned int index1 = 0; index1 < jets.size() - 2; ++index1) {
 			for (unsigned int index2 = index1 + 1; index2 < jets.size() - 1;
@@ -133,7 +133,7 @@ double BristolNTuple_GlobalEventVars::M3(const pat::JetCollection& jets) {
 					TLorentzVector jet3( jets.at(index3).px(), jets.at(index3).py(), jets.at(index3).pz(), jets.at(index3).energy() );
 
 					TLorentzVector m3Vector(jet1 + jet2 + jet3);
-					double currentPt = m3Vector.Pt();
+					float currentPt = m3Vector.Pt();
 					if (currentPt > max_pt) {
 						max_pt = currentPt;
 						m3 = m3Vector.M();
@@ -146,8 +146,8 @@ double BristolNTuple_GlobalEventVars::M3(const pat::JetCollection& jets) {
 	return m3;
 }
 
-double BristolNTuple_GlobalEventVars::M_bl(const pat::Jet* b_jet, const TLorentzVector& lepton ) {
-	double m_bl(0.);
+float BristolNTuple_GlobalEventVars::M_bl(const pat::Jet* b_jet, const TLorentzVector& lepton ) {
+	float m_bl(0.);
 	TLorentzVector b( b_jet->px(), b_jet->py(), b_jet->pz(), b_jet->energy() );
 	TLorentzVector bl( lepton + b );
 
@@ -155,8 +155,8 @@ double BristolNTuple_GlobalEventVars::M_bl(const pat::Jet* b_jet, const TLorentz
 	return m_bl;
 }
 
-double BristolNTuple_GlobalEventVars::angle_bl(const pat::Jet* b_jet, const TLorentzVector& lepton) {
-	double angle(-1);
+float BristolNTuple_GlobalEventVars::angle_bl(const pat::Jet* b_jet, const TLorentzVector& lepton) {
+	float angle(-1);
 	TLorentzVector b( b_jet->px(), b_jet->py(), b_jet->pz(), b_jet->energy() );
 	angle = b.Angle(lepton.Vect());
 	return angle;
@@ -164,10 +164,10 @@ double BristolNTuple_GlobalEventVars::angle_bl(const pat::Jet* b_jet, const TLor
 
 unsigned int BristolNTuple_GlobalEventVars::getClosestBJet( const TLorentzVector& lepton, const std::vector<const pat::Jet*> b_jets) {
 	// find closest b_jet
-	double closestDR = 9999;
+	float closestDR = 9999;
 	unsigned int closestIndex = 9999;
 	for ( unsigned int index = 0; index < b_jets.size(); index++ ) {
-		double DR = deltaR( lepton.Eta(), lepton.Phi(), b_jets.at(index)->eta(), b_jets.at(index)->phi() );
+		float DR = deltaR( lepton.Eta(), lepton.Phi(), b_jets.at(index)->eta(), b_jets.at(index)->phi() );
 		if ( DR < closestDR ) {
 			closestDR = DR;
 			closestIndex = index;
@@ -178,10 +178,10 @@ unsigned int BristolNTuple_GlobalEventVars::getClosestBJet( const TLorentzVector
 
 
 
-double BristolNTuple_GlobalEventVars::MT(const TLorentzVector& lepton, const pat::MET& met) {
-	double energySquared = pow(lepton.Et() + met.et(), 2);
-	double momentumSquared = pow(lepton.Px() + met.px(), 2) + pow(lepton.Py() + met.py(), 2);
-	double MTSquared = energySquared - momentumSquared;
+float BristolNTuple_GlobalEventVars::MT(const TLorentzVector& lepton, const pat::MET& met) {
+	float energySquared = pow(lepton.Et() + met.et(), 2);
+	float momentumSquared = pow(lepton.Px() + met.px(), 2) + pow(lepton.Py() + met.py(), 2);
+	float MTSquared = energySquared - momentumSquared;
 
 	if (MTSquared > 0)
 		return sqrt(MTSquared);
@@ -189,7 +189,7 @@ double BristolNTuple_GlobalEventVars::MT(const TLorentzVector& lepton, const pat
 		return -1;
 }
 
-double BristolNTuple_GlobalEventVars::WPT(const TLorentzVector& lepton, const pat::MET& met) {
+float BristolNTuple_GlobalEventVars::WPT(const TLorentzVector& lepton, const pat::MET& met) {
 	TLorentzVector m( met.px(), met.py(), met.pz(), met.energy() );
 	TLorentzVector W_boson(lepton + m );
 	return W_boson.Pt();

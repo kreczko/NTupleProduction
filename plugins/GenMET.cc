@@ -10,15 +10,15 @@ BristolNTuple_GenMET::BristolNTuple_GenMET(const edm::ParameterSet& iConfig) :
     prefix  (iConfig.getParameter<std::string>  ("Prefix")),
     suffix  (iConfig.getParameter<std::string>  ("Suffix"))
 {
-    produces <double> ( prefix + "Ex" + suffix );
-    produces <double> ( prefix + "Ey" + suffix );
+    produces <float> ( prefix + "Ex" + suffix );
+    produces <float> ( prefix + "Ey" + suffix );
 }
 
 void BristolNTuple_GenMET::
 produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-    std::auto_ptr <double> px(new double());
-    std::auto_ptr <double> py(new double());
+    std::auto_ptr <float> px(new float());
+    std::auto_ptr <float> py(new float());
 
     //-----------------------------------------------------------------
     if (!iEvent.isRealData()) {

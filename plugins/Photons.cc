@@ -20,42 +20,42 @@ BristolNTuple_Photons::BristolNTuple_Photons(const edm::ParameterSet& iConfig) :
     suffix  (iConfig.getParameter<std::string>  ("Suffix")),
     maxSize (iConfig.getParameter<unsigned int> ("MaxSize"))
 {
-    produces<std::vector<double> > (prefix + "Px" + suffix);
-    produces<std::vector<double> > (prefix + "Py" + suffix);
-    produces<std::vector<double> > (prefix + "Pz" + suffix);
-    produces<std::vector<double> > (prefix + "Energy" + suffix);
-    produces<std::vector<double> > (prefix + "EcalIso" + suffix);
-    produces<std::vector<double> > (prefix + "HcalIso" + suffix);
-    produces<std::vector<double> > (prefix + "HoE" + suffix);
-    produces<std::vector<double> > (prefix + "TrkIso" + suffix);
-    produces<std::vector<double> > (prefix + "SigmaIEtaIEta" + suffix);
+    produces<std::vector<float> > (prefix + "Px" + suffix);
+    produces<std::vector<float> > (prefix + "Py" + suffix);
+    produces<std::vector<float> > (prefix + "Pz" + suffix);
+    produces<std::vector<float> > (prefix + "Energy" + suffix);
+    produces<std::vector<float> > (prefix + "EcalIso" + suffix);
+    produces<std::vector<float> > (prefix + "HcalIso" + suffix);
+    produces<std::vector<float> > (prefix + "HoE" + suffix);
+    produces<std::vector<float> > (prefix + "TrkIso" + suffix);
+    produces<std::vector<float> > (prefix + "SigmaIEtaIEta" + suffix);
     produces<std::vector<bool> > (prefix + "TrkVeto" + suffix);
-    produces<std::vector<double> > (prefix + "SCseedEnergy" + suffix);
-    produces<std::vector<double> > (prefix + "SCenergy" + suffix);
-    produces<std::vector<double> > (prefix + "SCeta" + suffix);
-    produces<std::vector<double> > (prefix + "SCphi" + suffix);
-    produces<std::vector<double> > (prefix + "E3x3" + suffix);
-    produces<std::vector<double> > (prefix + "E5x5" + suffix);
+    produces<std::vector<float> > (prefix + "SCseedEnergy" + suffix);
+    produces<std::vector<float> > (prefix + "SCenergy" + suffix);
+    produces<std::vector<float> > (prefix + "SCeta" + suffix);
+    produces<std::vector<float> > (prefix + "SCphi" + suffix);
+    produces<std::vector<float> > (prefix + "E3x3" + suffix);
+    produces<std::vector<float> > (prefix + "E5x5" + suffix);
 }
 
 void BristolNTuple_Photons::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-    std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > energy(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > ecalIso(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > hcalIso(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > hoe(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > trkIso(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > sigmaIetaIeta(new std::vector<double>());
+    std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > energy(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > ecalIso(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > hcalIso(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > hoe(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > trkIso(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > sigmaIetaIeta(new std::vector<float>());
     std::auto_ptr < std::vector<bool> > trkVeto(new std::vector<bool>());
-    std::auto_ptr < std::vector<double> > SCseedEnergy(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > SCenergy(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > SCeta(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > SCphi(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > E3x3(new std::vector<double>());
-    std::auto_ptr < std::vector<double> > E5x5(new std::vector<double>());
+    std::auto_ptr < std::vector<float> > SCseedEnergy(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > SCenergy(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > SCeta(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > SCphi(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > E3x3(new std::vector<float>());
+    std::auto_ptr < std::vector<float> > E5x5(new std::vector<float>());
 
     //-----------------------------------------------------------------
 

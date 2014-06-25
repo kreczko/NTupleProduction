@@ -8,32 +8,32 @@ BristolNTuple_GenJets::BristolNTuple_GenJets(const edm::ParameterSet& iConfig) :
     inputTag(iConfig.getParameter<edm::InputTag>("InputTag")),
     prefix  (iConfig.getParameter<std::string>  ("Prefix")),
     suffix  (iConfig.getParameter<std::string>  ("Suffix")),
-    minPt (iConfig.getParameter<double> ("minPt")),
-    maxAbsoluteEta (iConfig.getParameter<double> ("maxAbsoluteEta")),
+    minPt (iConfig.getParameter<float> ("minPt")),
+    maxAbsoluteEta (iConfig.getParameter<float> ("maxAbsoluteEta")),
     maxSize (iConfig.getParameter<unsigned int> ("MaxSize"))
 {
-	produces < std::vector<double> > (prefix + "Px" + suffix);
-	produces < std::vector<double> > (prefix + "Py" + suffix);
-	produces < std::vector<double> > (prefix + "Pz" + suffix);
-	produces < std::vector<double> > (prefix + "Energy" + suffix);
-	produces < std::vector<double> > (prefix + "Charge" + suffix);
-	produces < std::vector<double> > (prefix + "Mass" + suffix);
+	produces < std::vector<float> > (prefix + "Px" + suffix);
+	produces < std::vector<float> > (prefix + "Py" + suffix);
+	produces < std::vector<float> > (prefix + "Pz" + suffix);
+	produces < std::vector<float> > (prefix + "Energy" + suffix);
+	produces < std::vector<float> > (prefix + "Charge" + suffix);
+	produces < std::vector<float> > (prefix + "Mass" + suffix);
 
-	produces < std::vector<double> > (prefix + "EMF" + suffix);
-	produces < std::vector<double> > (prefix + "HADF" + suffix);
+	produces < std::vector<float> > (prefix + "EMF" + suffix);
+	produces < std::vector<float> > (prefix + "HADF" + suffix);
 }
 
 void BristolNTuple_GenJets::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-	std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > energy(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > charge(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > mass(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > energy(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > charge(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > mass(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > emf(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hadf(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > emf(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hadf(new std::vector<float>());
 
 	//-----------------------------------------------------------------
 	if (!iEvent.isRealData()) {

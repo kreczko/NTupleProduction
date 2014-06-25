@@ -10,36 +10,36 @@ BristolNTuple_Vertex::BristolNTuple_Vertex(const edm::ParameterSet& iConfig) :
     prefix  (iConfig.getParameter<std::string>  ("Prefix")),
     suffix  (iConfig.getParameter<std::string>  ("Suffix"))
 {
-  produces <std::vector<double> > ( prefix + "X" + suffix );
-  produces <std::vector<double> > ( prefix + "Y" + suffix );
-  produces <std::vector<double> > ( prefix + "Z" + suffix );
-  produces <std::vector<double> > ( prefix + "XErr" + suffix );
-  produces <std::vector<double> > ( prefix + "YErr" + suffix );
-  produces <std::vector<double> > ( prefix + "ZErr" + suffix );
-  produces <std::vector<double> > ( prefix + "Rho" + suffix );
-  produces <std::vector<double> > ( prefix + "Chi2" + suffix );
-  produces <std::vector<double> > ( prefix + "NDF" + suffix );
-  produces <std::vector<int> >    ( prefix + "NTracks" + suffix );
-  produces <std::vector<int> >    ( prefix + "NTracksW05" + suffix );
-  produces <std::vector<int> >   ( prefix + "IsFake" + suffix );
+  produces <std::vector<float> > ( prefix + "X" + suffix );
+  produces <std::vector<float> > ( prefix + "Y" + suffix );
+  produces <std::vector<float> > ( prefix + "Z" + suffix );
+  produces <std::vector<float> > ( prefix + "XErr" + suffix );
+  produces <std::vector<float> > ( prefix + "YErr" + suffix );
+  produces <std::vector<float> > ( prefix + "ZErr" + suffix );
+  produces <std::vector<float> > ( prefix + "Rho" + suffix );
+  produces <std::vector<float> > ( prefix + "Chi2" + suffix );
+  produces <std::vector<float> > ( prefix + "NDF" + suffix );
+  produces <std::vector<unsigned unsigned int> >    ( prefix + "NTracks" + suffix );
+  produces <std::vector<unsigned unsigned int> >    ( prefix + "NTracksW05" + suffix );
+  produces <std::vector<unsigned unsigned int> >   ( prefix + "IsFake" + suffix );
   produces < unsigned int > ( prefix + "NRecoVertices" + suffix );
 }
 
 void BristolNTuple_Vertex::
 produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-  std::auto_ptr<std::vector<double> >  x  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  y  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  z  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  xErr  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  yErr  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  zErr  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  rho  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  chi2  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<double> >  ndf  ( new std::vector<double>()  );
-  std::auto_ptr<std::vector<int> >     ntracks  ( new std::vector<int>()  );
-  std::auto_ptr<std::vector<int> >     ntracksw05  ( new std::vector<int>()  );
-  std::auto_ptr<std::vector<int> >    isfake  ( new std::vector<int>()  );
+  std::auto_ptr<std::vector<float> >  x  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  y  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  z  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  xErr  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  yErr  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  zErr  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  rho  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  chi2  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<float> >  ndf  ( new std::vector<float>()  );
+  std::auto_ptr<std::vector<unsigned int> >     ntracks  ( new std::vector<unsigned int>()  );
+  std::auto_ptr<std::vector<unsigned int> >     ntracksw05  ( new std::vector<unsigned int>()  );
+  std::auto_ptr<std::vector<bool> >    isfake  ( new std::vector<bool>()  );
   std::auto_ptr< unsigned int >    nvertices  ( new unsigned int (0)  );
 
   //-----------------------------------------------------------------
@@ -63,7 +63,7 @@ produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
       ndf->push_back( it->ndof() );
       ntracks->push_back( int(it->tracksSize()) );
       ntracksw05->push_back( it->nTracks(0.5) ); // number of tracks in the vertex with weight above 0.5
-      isfake->push_back( it->isFake() ? 1 : 0);
+      isfake->push_back( it->isFake() );
     }
   } else {
     edm::LogError("BristolNTuple_VertexError") << "Error! Can't get the product " << inputTag;

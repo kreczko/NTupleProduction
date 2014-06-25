@@ -10,37 +10,37 @@ BristolNTuple_GenParticles::BristolNTuple_GenParticles(const edm::ParameterSet& 
     suffix  (iConfig.getParameter<std::string>  ("Suffix")),
     maxSize (iConfig.getParameter<unsigned int> ("MaxSize"))
 {
-  produces <std::vector<double> > ( prefix + "Px" + suffix );
-  produces <std::vector<double> > ( prefix + "Py" + suffix );
-  produces <std::vector<double> > ( prefix + "Pz" + suffix );
-  produces <std::vector<double> > ( prefix + "Energy" + suffix );
-  produces <std::vector<double> > ( prefix + "Charge" + suffix );
-  produces <std::vector<double> > ( prefix + "Mass" + suffix );
+  produces <std::vector<float> > ( prefix + "Px" + suffix );
+  produces <std::vector<float> > ( prefix + "Py" + suffix );
+  produces <std::vector<float> > ( prefix + "Pz" + suffix );
+  produces <std::vector<float> > ( prefix + "Energy" + suffix );
+  produces <std::vector<float> > ( prefix + "Charge" + suffix );
+  produces <std::vector<float> > ( prefix + "Mass" + suffix );
   produces <std::vector<int> >    ( prefix + "PdgId" + suffix );
-  produces <std::vector<double> > ( prefix + "VX" + suffix );
-  produces <std::vector<double> > ( prefix + "VY" + suffix );
-  produces <std::vector<double> > ( prefix + "VZ" + suffix );
-  produces <std::vector<int> >    ( prefix + "NumDaught" + suffix );
-  produces <std::vector<int> >    ( prefix + "Status" + suffix );
-  produces <std::vector<int> >    ( prefix + "MotherIndex" + suffix );
+  produces <std::vector<float> > ( prefix + "VX" + suffix );
+  produces <std::vector<float> > ( prefix + "VY" + suffix );
+  produces <std::vector<float> > ( prefix + "VZ" + suffix );
+  produces <std::vector<unsigned int> >    ( prefix + "NumDaught" + suffix );
+  produces <std::vector<unsigned int> >    ( prefix + "Status" + suffix );
+  produces <std::vector<unsigned int> >    ( prefix + "MotherIndex" + suffix );
 }
 
 void BristolNTuple_GenParticles::
 produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-	std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > energy(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > charge(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > mass(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > energy(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > charge(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > mass(new std::vector<float>());
 	std::auto_ptr < std::vector<int> > pdgId(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > vx(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > vy(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > vz(new std::vector<double>());
-	std::auto_ptr < std::vector<int> > numDaught(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > status(new std::vector<int>());
-	std::auto_ptr < std::vector<int> > motherIndex(new std::vector<int>());
+	std::auto_ptr < std::vector<float> > vx(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > vy(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > vz(new std::vector<float>());
+	std::auto_ptr < std::vector<unsigned int> > numDaught(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > status(new std::vector<unsigned int>());
+	std::auto_ptr < std::vector<unsigned int> > motherIndex(new std::vector<unsigned int>());
 
 	//-----------------------------------------------------------------
 	if (!iEvent.isRealData()) {

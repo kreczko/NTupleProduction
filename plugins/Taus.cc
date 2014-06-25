@@ -22,24 +22,24 @@ BristolNTuple_Taus::BristolNTuple_Taus(const edm::ParameterSet& iConfig) :
 		inputTag(iConfig.getParameter < edm::InputTag > ("InputTag")), prefix(
 				iConfig.getParameter < std::string > ("Prefix")), suffix(
 				iConfig.getParameter < std::string > ("Suffix")), maxSize(iConfig.getParameter<unsigned int>("MaxSize")) {
-	produces < std::vector<double> > (prefix + "Px" + suffix);
-	produces < std::vector<double> > (prefix + "Py" + suffix);
-	produces < std::vector<double> > (prefix + "Pz" + suffix);
-	produces < std::vector<double> > (prefix + "Energy" + suffix);
+	produces < std::vector<float> > (prefix + "Px" + suffix);
+	produces < std::vector<float> > (prefix + "Py" + suffix);
+	produces < std::vector<float> > (prefix + "Pz" + suffix);
+	produces < std::vector<float> > (prefix + "Energy" + suffix);
 	produces < std::vector<int> > (prefix + "Charge" + suffix);
 	produces < std::vector<int> > (prefix + "IsPFTau" + suffix);
 	produces < std::vector<int> > (prefix + "IsCaloTau" + suffix);
 	produces < std::vector<int> > (prefix + "DecayMode" + suffix);
-	produces < std::vector<double> > (prefix + "EmFraction" + suffix);
-	produces < std::vector<double> > (prefix + "Hcal3x3OverPLead" + suffix);
-	produces < std::vector<double> > (prefix + "HcalMaxOverPLead" + suffix);
-	produces < std::vector<double> > (prefix + "HcalTotOverPLead" + suffix);
-	produces < std::vector<double> > (prefix + "IsolationPFChargedHadrCandsPtSum" + suffix);
-	produces < std::vector<double> > (prefix + "IsolationPFGammaCandsEtSum" + suffix);
-	produces < std::vector<double> > (prefix + "LeadPFChargedHadrCandsignedSipt" + suffix);
-//	produces < std::vector<double> > (prefix + "EtaLeadCharged" + suffix);
-//	produces < std::vector<double> > (prefix + "PhiLeadCharged" + suffix);
-//	produces < std::vector<double> > (prefix + "PtLeadCharged" + suffix);
+	produces < std::vector<float> > (prefix + "EmFraction" + suffix);
+	produces < std::vector<float> > (prefix + "Hcal3x3OverPLead" + suffix);
+	produces < std::vector<float> > (prefix + "HcalMaxOverPLead" + suffix);
+	produces < std::vector<float> > (prefix + "HcalTotOverPLead" + suffix);
+	produces < std::vector<float> > (prefix + "IsolationPFChargedHadrCandsPtSum" + suffix);
+	produces < std::vector<float> > (prefix + "IsolationPFGammaCandsEtSum" + suffix);
+	produces < std::vector<float> > (prefix + "LeadPFChargedHadrCandsignedSipt" + suffix);
+//	produces < std::vector<float> > (prefix + "EtaLeadCharged" + suffix);
+//	produces < std::vector<float> > (prefix + "PhiLeadCharged" + suffix);
+//	produces < std::vector<float> > (prefix + "PtLeadCharged" + suffix);
 	produces < std::vector<int> > (prefix + "AgainstElectronMVADiscr" + suffix);
 	produces < std::vector<int> > (prefix + "AgainstMuonMediumDiscr" + suffix);
 	produces < std::vector<int> > (prefix + "ByMediumIsolationDiscr" + suffix);
@@ -56,24 +56,24 @@ BristolNTuple_Taus::BristolNTuple_Taus(const edm::ParameterSet& iConfig) :
 
 void BristolNTuple_Taus::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-	std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > energy(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > energy(new std::vector<float>());
 	std::auto_ptr < std::vector<int> > charge(new std::vector<int>());
 	std::auto_ptr < std::vector<int> > ispftau(new std::vector<int>());
 	std::auto_ptr < std::vector<int> > iscalotau(new std::vector<int>());
 	std::auto_ptr < std::vector<int> > decaymode(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > emfraction(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcal3x3overplead(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalmaxoverplead(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcaltotoverplead(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > isolationpfchargedhadrcandsptsum(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > isolationpfgammacandsetsum(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > leadpfchargedhadrcandsignedsipt(new std::vector<double>());
-//	std::auto_ptr < std::vector<double> > etaleadcharged(new std::vector<double>());
-//	std::auto_ptr < std::vector<double> > phileadcharged(new std::vector<double>());
-//	std::auto_ptr < std::vector<double> > ptleadcharged(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > emfraction(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcal3x3overplead(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalmaxoverplead(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcaltotoverplead(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > isolationpfchargedhadrcandsptsum(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > isolationpfgammacandsetsum(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > leadpfchargedhadrcandsignedsipt(new std::vector<float>());
+//	std::auto_ptr < std::vector<float> > etaleadcharged(new std::vector<float>());
+//	std::auto_ptr < std::vector<float> > phileadcharged(new std::vector<float>());
+//	std::auto_ptr < std::vector<float> > ptleadcharged(new std::vector<float>());
 	std::auto_ptr < std::vector<int> > againstElectronMVADiscr(new std::vector<int>());
 	std::auto_ptr < std::vector<int> > againstMuonMediumDiscr(new std::vector<int>());
 //	std::auto_ptr < std::vector<int> > byisolationusingleadingpiondiscr(new std::vector<int>());
@@ -145,7 +145,7 @@ void BristolNTuple_Taus::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 			px->push_back(it->px());
 			py->push_back(it->py());
 			pz->push_back(it->pz());
-			energy->push_back((double) (it->energy()));
+			energy->push_back((float) (it->energy()));
 			charge->push_back((int) (it->charge()));
 			if (it->isPFTau()) {
 				ispftau->push_back(1);
@@ -159,19 +159,19 @@ void BristolNTuple_Taus::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 			if (!it->isCaloTau()) {
 				iscalotau->push_back(0);
 			}
-			decaymode->push_back((double) (it->decayMode()));
-			emfraction->push_back((double) (it->emFraction()));
-			hcal3x3overplead->push_back((double) (it->hcal3x3OverPLead()));
-			hcalmaxoverplead->push_back((double) (it->hcalMaxOverPLead()));
-			hcaltotoverplead->push_back((double) (it->hcalTotOverPLead()));
-			isolationpfchargedhadrcandsptsum->push_back((double) (it->isolationPFChargedHadrCandsPtSum()));
-			isolationpfgammacandsetsum->push_back((double) (it->isolationPFGammaCandsEtSum()));
-			leadpfchargedhadrcandsignedsipt->push_back((double) (it->leadPFChargedHadrCandsignedSipt()));
+			decaymode->push_back((float) (it->decayMode()));
+			emfraction->push_back((float) (it->emFraction()));
+			hcal3x3overplead->push_back((float) (it->hcal3x3OverPLead()));
+			hcalmaxoverplead->push_back((float) (it->hcalMaxOverPLead()));
+			hcaltotoverplead->push_back((float) (it->hcalTotOverPLead()));
+			isolationpfchargedhadrcandsptsum->push_back((float) (it->isolationPFChargedHadrCandsPtSum()));
+			isolationpfgammacandsetsum->push_back((float) (it->isolationPFGammaCandsEtSum()));
+			leadpfchargedhadrcandsignedsipt->push_back((float) (it->leadPFChargedHadrCandsignedSipt()));
 			//causing exceptions
 //			reco::PFCandidateRef leadPFChargedHadrCand_Ref = it->leadPFChargedHadrCand();
-//			etaleadcharged->push_back((double) (leadPFChargedHadrCand_Ref->eta()));
-//			phileadcharged->push_back((double) (leadPFChargedHadrCand_Ref->phi()));
-//			ptleadcharged->push_back((double) (leadPFChargedHadrCand_Ref->pt()));
+//			etaleadcharged->push_back((float) (leadPFChargedHadrCand_Ref->eta()));
+//			phileadcharged->push_back((float) (leadPFChargedHadrCand_Ref->phi()));
+//			ptleadcharged->push_back((float) (leadPFChargedHadrCand_Ref->pt()));
 			//
 		}
 	} else {

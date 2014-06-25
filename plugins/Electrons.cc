@@ -29,215 +29,215 @@ BristolNTuple_Electrons::BristolNTuple_Electrons(const edm::ParameterSet& iConfi
 {
 
 	//kinematic variables
-	produces < std::vector<double> > (prefix + "Px" + suffix);
-	produces < std::vector<double> > (prefix + "Py" + suffix);
-	produces < std::vector<double> > (prefix + "Pz" + suffix);
-	produces < std::vector<double> > (prefix + "Energy" + suffix);
+	produces < std::vector<float> > (prefix + "Px" + suffix);
+	produces < std::vector<float> > (prefix + "Py" + suffix);
+	produces < std::vector<float> > (prefix + "Pz" + suffix);
+	produces < std::vector<float> > (prefix + "Energy" + suffix);
 	//extra properties
 	produces < std::vector<int> > (prefix + "Charge" + suffix);
-	produces < std::vector<double> > (prefix + "ecalDrivenMomentum.Px" + suffix);
-	produces < std::vector<double> > (prefix + "ecalDrivenMomentum.Py" + suffix);
-	produces < std::vector<double> > (prefix + "ecalDrivenMomentum.Pz" + suffix);
+	produces < std::vector<float> > (prefix + "ecalDrivenMomentum.Px" + suffix);
+	produces < std::vector<float> > (prefix + "ecalDrivenMomentum.Py" + suffix);
+	produces < std::vector<float> > (prefix + "ecalDrivenMomentum.Pz" + suffix);
 
 	//electron ID variables
-	produces < std::vector<double> > (prefix + "HadronicOverEM" + suffix);
-	produces < std::vector<double> > (prefix + "eSeedClusterOverPout" + suffix);
-	produces < std::vector<double> > (prefix + "ESuperClusterOverP" + suffix);
-	produces < std::vector<double> > (prefix + "Fbrem" + suffix);
-	produces < std::vector<double> > (prefix + "SigmaEtaEta" + suffix);
-	produces < std::vector<double> > (prefix + "SigmaIEtaIEta" + suffix);
-	produces < std::vector<double> > (prefix + "DeltaPhiTrkSC" + suffix);
-	produces < std::vector<double> > (prefix + "DeltaEtaTrkSC" + suffix);
-	produces < std::vector<double> > (prefix + "Likelihood" + suffix);
+	produces < std::vector<float> > (prefix + "HadronicOverEM" + suffix);
+	produces < std::vector<float> > (prefix + "eSeedClusterOverPout" + suffix);
+	produces < std::vector<float> > (prefix + "ESuperClusterOverP" + suffix);
+	produces < std::vector<float> > (prefix + "Fbrem" + suffix);
+	produces < std::vector<float> > (prefix + "SigmaEtaEta" + suffix);
+	produces < std::vector<float> > (prefix + "SigmaIEtaIEta" + suffix);
+	produces < std::vector<float> > (prefix + "DeltaPhiTrkSC" + suffix);
+	produces < std::vector<float> > (prefix + "DeltaEtaTrkSC" + suffix);
+	produces < std::vector<float> > (prefix + "Likelihood" + suffix);
 	produces < std::vector<int> > (prefix + "NumberOfBrems" + suffix);
-	produces < std::vector<double> > (prefix + "mvaTrigV0" + suffix);
-	produces < std::vector<double> > (prefix + "mvaNonTrigV0" + suffix);
+	produces < std::vector<float> > (prefix + "mvaTrigV0" + suffix);
+	produces < std::vector<float> > (prefix + "mvaNonTrigV0" + suffix);
 
 	//electron isolation variables
-	produces < std::vector<double> > (prefix + "TrkIso03" + suffix);
-	produces < std::vector<double> > (prefix + "EcalIso03" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIso03" + suffix);
-	produces < std::vector<double> > (prefix + "RelIso03" + suffix);
-	produces < std::vector<double> > (prefix + "TrkIso04" + suffix);
-	produces < std::vector<double> > (prefix + "EcalIso04" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIso04" + suffix);
-	produces < std::vector<double> > (prefix + "RelIso04" + suffix);
+	produces < std::vector<float> > (prefix + "TrkIso03" + suffix);
+	produces < std::vector<float> > (prefix + "EcalIso03" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIso03" + suffix);
+	produces < std::vector<float> > (prefix + "RelIso03" + suffix);
+	produces < std::vector<float> > (prefix + "TrkIso04" + suffix);
+	produces < std::vector<float> > (prefix + "EcalIso04" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIso04" + suffix);
+	produces < std::vector<float> > (prefix + "RelIso04" + suffix);
 
 	//electron PF isolation variables
 	if (storePFIsolation_) {
-		produces < std::vector<double> > (prefix + "PfChargedHadronIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PfNeutralHadronIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PFGammaIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso03DeltaBeta" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso03RhoEA" + suffix);
+		produces < std::vector<float> > (prefix + "PfChargedHadronIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PfNeutralHadronIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PFGammaIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso03DeltaBeta" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso03RhoEA" + suffix);
 
-		produces < std::vector<double> > (prefix + "PfChargedHadronIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PfNeutralHadronIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PFGammaIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PfChargedHadronIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PfNeutralHadronIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PFGammaIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso04" + suffix);
 
-		produces < std::vector<double> > (prefix + "PfChargedHadronIso05" + suffix);
-		produces < std::vector<double> > (prefix + "PfNeutralHadronIso05" + suffix);
-		produces < std::vector<double> > (prefix + "PFGammaIso05" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PfChargedHadronIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PfNeutralHadronIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PFGammaIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso05" + suffix);
 		//directional isolation
-		produces < std::vector<double> > (prefix + "DirectionalPFIso02" + suffix);
-		produces < std::vector<double> > (prefix + "DirectionalPFIso02FallOff" + suffix);
-		produces < std::vector<double> > (prefix + "PfRelIso02FallOff" + suffix);
-		produces < std::vector<double> > (prefix + "DirectionalPFIso03" + suffix);
-		produces < std::vector<double> > (prefix + "DirectionalPFIso03FallOff" + suffix);
-		produces < std::vector<double> > (prefix + "PfRelIso03FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso02" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso02FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "PfRelIso02FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso03" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso03FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "PfRelIso03FallOff" + suffix);
 		//PU charged hadron isolation
-		produces < std::vector<double> > (prefix + "PfPUChargedHadronIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PfPUChargedHadronIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PfPUChargedHadronIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PfPUChargedHadronIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PfPUChargedHadronIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PfPUChargedHadronIso05" + suffix);
 	}
 
 	//high energy electron isolation variables
-	produces < std::vector<double> > (prefix + "EcalIsoHeep03" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIsoD1Heep03" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIsoD2Heep03" + suffix);
-	produces < std::vector<double> > (prefix + "TrkIsoHeep03" + suffix);
-	produces < std::vector<double> > (prefix + "EcalIsoHeep04" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIsoD1Heep04" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIsoD2Heep04" + suffix);
-	produces < std::vector<double> > (prefix + "TrkIsoHeep04" + suffix);
+	produces < std::vector<float> > (prefix + "EcalIsoHeep03" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIsoD1Heep03" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIsoD2Heep03" + suffix);
+	produces < std::vector<float> > (prefix + "TrkIsoHeep03" + suffix);
+	produces < std::vector<float> > (prefix + "EcalIsoHeep04" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIsoD1Heep04" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIsoD2Heep04" + suffix);
+	produces < std::vector<float> > (prefix + "TrkIsoHeep04" + suffix);
 
 	//electron conversion identification variables
-	produces < std::vector<double> > (prefix + "Dist" + suffix);
-	produces < std::vector<double> > (prefix + "DCotTheta" + suffix);
-	produces < std::vector<double> > (prefix + "ConvRadius" + suffix);
+	produces < std::vector<float> > (prefix + "Dist" + suffix);
+	produces < std::vector<float> > (prefix + "DCotTheta" + suffix);
+	produces < std::vector<float> > (prefix + "ConvRadius" + suffix);
 	produces < std::vector<int> > (prefix + "MissingHits" + suffix);
 	//this might be identical to passConversionVeto
 	produces < std::vector<bool> > (prefix + "HasMatchedConvPhot" + suffix);
-	produces < std::vector<double> > (prefix + "shFracInnerHits" + suffix);
+	produces < std::vector<float> > (prefix + "shFracInnerHits" + suffix);
 	produces < std::vector<bool> > (prefix + "passConversionVeto" + suffix);
 
 	//calorimeter variables
-	produces < std::vector<double> > (prefix + "SCEta" + suffix);
-	produces < std::vector<double> > (prefix + "SCPhi" + suffix);
-	produces < std::vector<double> > (prefix + "SCPt" + suffix);
-	produces < std::vector<double> > (prefix + "SCP" + suffix);
-	produces < std::vector<double> > (prefix + "SCEnergy" + suffix);
-	produces < std::vector<double> > (prefix + "SCRawEnergy" + suffix);
+	produces < std::vector<float> > (prefix + "SCEta" + suffix);
+	produces < std::vector<float> > (prefix + "SCPhi" + suffix);
+	produces < std::vector<float> > (prefix + "SCPt" + suffix);
+	produces < std::vector<float> > (prefix + "SCP" + suffix);
+	produces < std::vector<float> > (prefix + "SCEnergy" + suffix);
+	produces < std::vector<float> > (prefix + "SCRawEnergy" + suffix);
 
 	//electron vertex variables
 	produces < std::vector<int> > (prefix + "VtxIndex" + suffix);
-	produces < std::vector<double> > (prefix + "VtxDistZ" + suffix);
-	produces < std::vector<double> > (prefix + "PrimaryVertexDXY" + suffix); //2D impact parameter, XY distance to vertex
-	produces < std::vector<double> > (prefix + "PrimaryVertexDXYError" + suffix);
-	produces < std::vector<double> > (prefix + "BeamSpotDXY" + suffix);
-	produces < std::vector<double> > (prefix + "BeamSpotDXYError" + suffix);
+	produces < std::vector<float> > (prefix + "VtxDistZ" + suffix);
+	produces < std::vector<float> > (prefix + "PrimaryVertexDXY" + suffix); //2D impact parameter, XY distance to vertex
+	produces < std::vector<float> > (prefix + "PrimaryVertexDXYError" + suffix);
+	produces < std::vector<float> > (prefix + "BeamSpotDXY" + suffix);
+	produces < std::vector<float> > (prefix + "BeamSpotDXYError" + suffix);
 	//quantities corrected for position of primary vertex
-	produces < std::vector<double> > (prefix + "PrimaryVertexDXYCorr" + suffix);
-	produces < std::vector<double> > (prefix + "VtxDistZCorr" + suffix);
+	produces < std::vector<float> > (prefix + "PrimaryVertexDXYCorr" + suffix);
+	produces < std::vector<float> > (prefix + "VtxDistZCorr" + suffix);
 }
 
 void BristolNTuple_Electrons::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 	//kinematic variables
-	std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > energy(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > energy(new std::vector<float>());
 	//extra properties
 	std::auto_ptr < std::vector<int> > charge(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > ecalDrivenMomentumPx(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ecalDrivenMomentumPy(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ecalDrivenMomentumPz(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > ecalDrivenMomentumPx(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ecalDrivenMomentumPy(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ecalDrivenMomentumPz(new std::vector<float>());
 	//electron ID variables
-	std::auto_ptr < std::vector<double> > hadronicOverEM(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > EseedOverPout(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > eSuperClusterOverP(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > fbrem(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sigmaEtaEta(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sigmaIEtaIEta(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > deltaPhiTrkSC(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > deltaEtaTrkSC(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > likelihood(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > hadronicOverEM(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > EseedOverPout(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > eSuperClusterOverP(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > fbrem(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sigmaEtaEta(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sigmaIEtaIEta(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > deltaPhiTrkSC(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > deltaEtaTrkSC(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > likelihood(new std::vector<float>());
 	std::auto_ptr < std::vector<int> > numberOfBrems(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > mvaTrigV0(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > mvaNonTrigV0(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > mvaTrigV0(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > mvaNonTrigV0(new std::vector<float>());
 
 	//electron isolation variables
-	std::auto_ptr < std::vector<double> > trkIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ecalIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > relIso04(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > trkIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ecalIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > relIso04(new std::vector<float>());
 	//smaller cone
-	std::auto_ptr < std::vector<double> > trkIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ecalIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > relIso03(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > trkIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ecalIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > relIso03(new std::vector<float>());
 
 	//electron PF isolation variables
-	std::auto_ptr < std::vector<double> > PfChargedHadronIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfNeutralHadronIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFGammaIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso03DeltaBeta(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso03RhoEA(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfChargedHadronIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfNeutralHadronIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFGammaIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso03DeltaBeta(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso03RhoEA(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > PfChargedHadronIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfNeutralHadronIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFGammaIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso04(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfChargedHadronIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfNeutralHadronIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFGammaIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso04(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > PfChargedHadronIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfNeutralHadronIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFGammaIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso05(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfChargedHadronIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfNeutralHadronIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFGammaIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso05(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > DirectionalPFIso02(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > DirectionalPFIso02FallOff(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfRelIso02FallOff(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > DirectionalPFIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > DirectionalPFIso03FallOff(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfRelIso03FallOff(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso02(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso02FallOff(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfRelIso02FallOff(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso03FallOff(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfRelIso03FallOff(new std::vector<float>());
 	//PU charged hadron isolation
-	std::auto_ptr < std::vector<double> > PfPUChargedHadronIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfPUChargedHadronIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfPUChargedHadronIso05(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfPUChargedHadronIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfPUChargedHadronIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfPUChargedHadronIso05(new std::vector<float>());
 
-//    std::auto_ptr < std::vector<double> > dB(new std::vector<double>());
+//    std::auto_ptr < std::vector<float> > dB(new std::vector<float>());
 
 	//high energy electron isolation variables
-	std::auto_ptr < std::vector<double> > ecalIsoHeep03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIsoD1Heep03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIsoD2Heep03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > trkIsoHeep03(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > ecalIsoHeep03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIsoD1Heep03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIsoD2Heep03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > trkIsoHeep03(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > ecalIsoHeep04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIsoD1Heep04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIsoD2Heep04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > trkIsoHeep04(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > ecalIsoHeep04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIsoD1Heep04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIsoD2Heep04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > trkIsoHeep04(new std::vector<float>());
 
 	//electron conversion identification variables
 	std::auto_ptr < std::vector<int> > missingHits(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > dist_vec(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > dCotTheta(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > conversionRadius(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > dist_vec(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > dCotTheta(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > conversionRadius(new std::vector<float>());
 	std::auto_ptr < std::vector<bool> > hasMatchedConvPhot(new std::vector<bool>());
-	std::auto_ptr < std::vector<double> > shFracInnerHits(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > shFracInnerHits(new std::vector<float>());
 	std::auto_ptr < std::vector<bool> > passConversionVeto(new std::vector<bool>());
 
 	//calorimeter variables
-	std::auto_ptr < std::vector<double> > scEta(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > scPhi(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > scPt(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > scP(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > scEnergy(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > scRawEnergy(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > scEta(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > scPhi(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > scPt(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > scP(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > scEnergy(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > scRawEnergy(new std::vector<float>());
 
 	//electron vertex variables
 	std::auto_ptr < std::vector<int> > vtxIndex(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > vtxDistZ(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > primaryVertexDXY(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > primaryVertexDXYError(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > beamSpotDXY(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > beamSpotDXYError(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > vtxDistZCorr(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > primaryVertexDXYCorr(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > vtxDistZ(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > primaryVertexDXY(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > primaryVertexDXYError(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > beamSpotDXY(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > beamSpotDXYError(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > vtxDistZCorr(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > primaryVertexDXYCorr(new std::vector<float>());
 
 	//-----------------------------------------------------------------
 	edm::Handle<double> rhoH;
@@ -293,12 +293,12 @@ void BristolNTuple_Electrons::produce(edm::Event& iEvent, const edm::EventSetup&
 							<< conversionsInputTag;
 			}
 			// Vertex association
-			double minVtxDist3D = 9999.;
+			float minVtxDist3D = 9999.;
 			int vtxIndex_ = -1;
-//			double vtxDistXY_ = -9999.;
-			double vtxDistZ_ = -9999.;
-			double vtxDistXY_Corr = -9999.;
-			double vtxDistZ_Corr = -9999.;
+//			float vtxDistXY_ = -9999.;
+			float vtxDistZ_ = -9999.;
+			float vtxDistXY_Corr = -9999.;
+			float vtxDistZ_Corr = -9999.;
 
 			if (primaryVertices.isValid()) {
 				edm::LogInfo("RootTupleMakerV2_ElectronsInfo") << "Total # Primary Vertices: "
@@ -313,9 +313,9 @@ void BristolNTuple_Electrons::produce(edm::Event& iEvent, const edm::EventSetup&
 				for (reco::VertexCollection::const_iterator v_it = primaryVertices->begin();
 						v_it != primaryVertices->end(); ++v_it) {
 
-					double distXY = it->gsfTrack()->dxy(v_it->position());
-					double distZ = it->gsfTrack()->dz(v_it->position());
-					double dist3D = sqrt(pow(distXY, 2) + pow(distZ, 2));
+					float distXY = it->gsfTrack()->dxy(v_it->position());
+					float distZ = it->gsfTrack()->dz(v_it->position());
+					float dist3D = sqrt(pow(distXY, 2) + pow(distZ, 2));
 
 					if (dist3D < minVtxDist3D) {
 						minVtxDist3D = dist3D;
@@ -329,7 +329,7 @@ void BristolNTuple_Electrons::produce(edm::Event& iEvent, const edm::EventSetup&
 			}
 
 			// Likelihood Based Ele ID ( https://twiki.cern.ch/twiki/bin/view/CMS/LikelihoodBasedEleID2011 )
-			double likelihood_ = -999.;
+			float likelihood_ = -999.;
 			if (eIDValueMap[0].isValid()) {
 				likelihood_ = eIDmapLikelihood[it->originalObjectRef()];
 			}
@@ -375,9 +375,9 @@ void BristolNTuple_Electrons::produce(edm::Event& iEvent, const edm::EventSetup&
 				pat::IsolationKeys isokeyPFGammaIso = pat::IsolationKeys(6);
 				pat::IsolationKeys isokeyPfPUChargedHadronIso = pat::IsolationKeys(12);
 
-				double pfRelIso03(0), pfRelIso04(0), pfRelIso05(0);
-				double directionalPFIso02(0), directionalPFIso02FallOff(0), pfIso02FallOff(0);
-				double directionalPFIso03(0), directionalPFIso03FallOff(0), pfIso03FallOff(0);
+				float pfRelIso03(0), pfRelIso04(0), pfRelIso05(0);
+				float directionalPFIso02(0), directionalPFIso02FallOff(0), pfIso02FallOff(0);
+				float directionalPFIso03(0), directionalPFIso03FallOff(0), pfIso03FallOff(0);
 
 				const reco::IsoDeposit * PfChargedHadronIsolation = it->isoDeposit(isokeyPfChargedHadronIso);
 				const reco::IsoDeposit * PfNeutralHadronIsolation = it->isoDeposit(isokeyPfNeutralHadronIso);

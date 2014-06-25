@@ -22,10 +22,10 @@ BristolNTuple_Muons::BristolNTuple_Muons(const edm::ParameterSet& iConfig) :
 {
 
 	//kinematic variables
-	produces < std::vector<double> > (prefix + "Px" + suffix);
-	produces < std::vector<double> > (prefix + "Py" + suffix);
-	produces < std::vector<double> > (prefix + "Pz" + suffix);
-	produces < std::vector<double> > (prefix + "Energy" + suffix);
+	produces < std::vector<float> > (prefix + "Px" + suffix);
+	produces < std::vector<float> > (prefix + "Py" + suffix);
+	produces < std::vector<float> > (prefix + "Pz" + suffix);
+	produces < std::vector<float> > (prefix + "Energy" + suffix);
 	//extra properties
 	produces < std::vector<int> > (prefix + "Charge" + suffix);
 
@@ -40,72 +40,72 @@ BristolNTuple_Muons::BristolNTuple_Muons(const edm::ParameterSet& iConfig) :
 	//muon isolation variables
 
 	//default
-	produces < std::vector<double> > (prefix + "TrkIso03" + suffix);
-	produces < std::vector<double> > (prefix + "EcalIso03" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIso03" + suffix);
-	produces < std::vector<double> > (prefix + "HOIso03" + suffix);
-	produces < std::vector<double> > (prefix + "RelIso03" + suffix);
+	produces < std::vector<float> > (prefix + "TrkIso03" + suffix);
+	produces < std::vector<float> > (prefix + "EcalIso03" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIso03" + suffix);
+	produces < std::vector<float> > (prefix + "HOIso03" + suffix);
+	produces < std::vector<float> > (prefix + "RelIso03" + suffix);
 	//bigger cone
-	produces < std::vector<double> > (prefix + "TrkIso05" + suffix);
-	produces < std::vector<double> > (prefix + "EcalIso05" + suffix);
-	produces < std::vector<double> > (prefix + "HcalIso05" + suffix);
-	produces < std::vector<double> > (prefix + "HOIso05" + suffix);
-	produces < std::vector<double> > (prefix + "RelIso05" + suffix);
+	produces < std::vector<float> > (prefix + "TrkIso05" + suffix);
+	produces < std::vector<float> > (prefix + "EcalIso05" + suffix);
+	produces < std::vector<float> > (prefix + "HcalIso05" + suffix);
+	produces < std::vector<float> > (prefix + "HOIso05" + suffix);
+	produces < std::vector<float> > (prefix + "RelIso05" + suffix);
 
 	//muonn PF isolation variables
 	if (storePFIsolation) {
-		produces < std::vector<double> > (prefix + "PfChargedHadronIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PfNeutralHadronIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PFGammaIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PfChargedHadronIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PfNeutralHadronIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PFGammaIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso03" + suffix);
 
-		produces < std::vector<double> > (prefix + "PfChargedHadronIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PfNeutralHadronIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PFGammaIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PfChargedHadronIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PfNeutralHadronIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PFGammaIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso04" + suffix);
 
-		produces < std::vector<double> > (prefix + "PfChargedHadronIso05" + suffix);
-		produces < std::vector<double> > (prefix + "PfNeutralHadronIso05" + suffix);
-		produces < std::vector<double> > (prefix + "PFGammaIso05" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PfChargedHadronIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PfNeutralHadronIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PFGammaIso05" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso05" + suffix);
 
 		//directional isolation
-		produces < std::vector<double> > (prefix + "DirectionalPFIso02" + suffix);
-		produces < std::vector<double> > (prefix + "DirectionalPFIso02FallOff" + suffix);
-		produces < std::vector<double> > (prefix + "PfRelIso02FallOff" + suffix);
-		produces < std::vector<double> > (prefix + "DirectionalPFIso03" + suffix);
-		produces < std::vector<double> > (prefix + "DirectionalPFIso03FallOff" + suffix);
-		produces < std::vector<double> > (prefix + "PfRelIso03FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso02" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso02FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "PfRelIso02FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso03" + suffix);
+		produces < std::vector<float> > (prefix + "DirectionalPFIso03FallOff" + suffix);
+		produces < std::vector<float> > (prefix + "PfRelIso03FallOff" + suffix);
 		//PU charged hadron isolation
-		produces < std::vector<double> > (prefix + "PfPUChargedHadronIso03" + suffix);
-		produces < std::vector<double> > (prefix + "PfPUChargedHadronIso04" + suffix);
-		produces < std::vector<double> > (prefix + "PfPUChargedHadronIso05" + suffix);
-		
+		produces < std::vector<float> > (prefix + "PfPUChargedHadronIso03" + suffix);
+		produces < std::vector<float> > (prefix + "PfPUChargedHadronIso04" + suffix);
+		produces < std::vector<float> > (prefix + "PfPUChargedHadronIso05" + suffix);
+
 		//new variable for pf delta beta corrected reliso
-		produces < std::vector<double> > (prefix + "sumChargedHadronPt03" + suffix);
-		produces < std::vector<double> > (prefix + "sumChargedHadronPt04" + suffix);
-		produces < std::vector<double> > (prefix + "sumNeutralHadronPt03" + suffix);
-		produces < std::vector<double> > (prefix + "sumNeutralHadronPt04" + suffix);
-		produces < std::vector<double> > (prefix + "sumPhotonPt03" + suffix);
-		produces < std::vector<double> > (prefix + "sumPhotonPt04" + suffix);
-		produces < std::vector<double> > (prefix + "sumPUPt03" + suffix);
-		produces < std::vector<double> > (prefix + "sumPUPt04" + suffix);
-		
-		produces < std::vector<double> > (prefix + "PFRelIso03DeltaBeta" + suffix);
-		produces < std::vector<double> > (prefix + "PFRelIso04DeltaBeta" + suffix);
-		
+		produces < std::vector<float> > (prefix + "sumChargedHadronPt03" + suffix);
+		produces < std::vector<float> > (prefix + "sumChargedHadronPt04" + suffix);
+		produces < std::vector<float> > (prefix + "sumNeutralHadronPt03" + suffix);
+		produces < std::vector<float> > (prefix + "sumNeutralHadronPt04" + suffix);
+		produces < std::vector<float> > (prefix + "sumPhotonPt03" + suffix);
+		produces < std::vector<float> > (prefix + "sumPhotonPt04" + suffix);
+		produces < std::vector<float> > (prefix + "sumPUPt03" + suffix);
+		produces < std::vector<float> > (prefix + "sumPUPt04" + suffix);
+
+		produces < std::vector<float> > (prefix + "PFRelIso03DeltaBeta" + suffix);
+		produces < std::vector<float> > (prefix + "PFRelIso04DeltaBeta" + suffix);
+
 	}
 
 	//associated track
-	produces < std::vector<double> > (prefix + "Track.D0" + suffix);
-	produces < std::vector<double> > (prefix + "Track.D0Error" + suffix);
-	produces < std::vector<double> > (prefix + "Track.Dz" + suffix);
-	produces < std::vector<double> > (prefix + "Track.DzError" + suffix);
-	produces < std::vector<double> > (prefix + "Track.ValidFractionOfHits" + suffix);
+	produces < std::vector<float> > (prefix + "Track.D0" + suffix);
+	produces < std::vector<float> > (prefix + "Track.D0Error" + suffix);
+	produces < std::vector<float> > (prefix + "Track.Dz" + suffix);
+	produces < std::vector<float> > (prefix + "Track.DzError" + suffix);
+	produces < std::vector<float> > (prefix + "Track.ValidFractionOfHits" + suffix);
 
 	//associated global track
 	produces < std::vector<int> > (prefix + "GlobalTrack.NumberOfValidMuonHits" + suffix); // in reference selection
-	produces < std::vector<double> > (prefix + "GlobalTrack.NormalizedChi2" + suffix); // in reference selection
+	produces < std::vector<float> > (prefix + "GlobalTrack.NormalizedChi2" + suffix); // in reference selection
 
 	//associated inner track
 	produces < std::vector<int> > (prefix + "InnerTrack.NumberOfValidHits" + suffix); // in reference selection (n Tracker Hits)
@@ -115,24 +115,24 @@ BristolNTuple_Muons::BristolNTuple_Muons(const edm::ParameterSet& iConfig) :
 
 	//muon vertex variables
 	produces < std::vector<int> > (prefix + "Vertex.Index" + suffix);
-	produces < std::vector<double> > (prefix + "Vertex.DistZ" + suffix); // in reference selection
-	produces < std::vector<double> > (prefix + "PrimaryVertexDXY" + suffix); // in reference selection
-	produces < std::vector<double> > (prefix + "PrimaryVertexDXYError" + suffix);
-	produces < std::vector<double> > (prefix + "BeamSpotDXY" + suffix);
-	produces < std::vector<double> > (prefix + "BeamSpotDXYError" + suffix);
+	produces < std::vector<float> > (prefix + "Vertex.DistZ" + suffix); // in reference selection
+	produces < std::vector<float> > (prefix + "PrimaryVertexDXY" + suffix); // in reference selection
+	produces < std::vector<float> > (prefix + "PrimaryVertexDXYError" + suffix);
+	produces < std::vector<float> > (prefix + "BeamSpotDXY" + suffix);
+	produces < std::vector<float> > (prefix + "BeamSpotDXYError" + suffix);
 
 	if (useCocktailRefits) {
 		//muon cocktail variables
-		produces < std::vector<double> > (prefix + "Cocktail.Px" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.Py" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.Pz" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.Px" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.Py" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.Pz" + suffix);
 		produces < std::vector<int> > (prefix + "Cocktail.Charge" + suffix);
 		produces < std::vector<int> > (prefix + "Cocktail.NumberOfValidTrackerHits" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.D0" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.D0Error" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.Dz" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.DzError" + suffix);
-		produces < std::vector<double> > (prefix + "Cocktail.NormalizedChi2" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.D0" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.D0Error" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.Dz" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.DzError" + suffix);
+		produces < std::vector<float> > (prefix + "Cocktail.NormalizedChi2" + suffix);
 	}
 
 }
@@ -140,10 +140,10 @@ BristolNTuple_Muons::BristolNTuple_Muons(const edm::ParameterSet& iConfig) :
 void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
 	//kinematic variables
-	std::auto_ptr < std::vector<double> > px(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > py(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > pz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > energy(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > px(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > py(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > pz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > energy(new std::vector<float>());
 
 	//extra properties
 	std::auto_ptr < std::vector<int> > charge(new std::vector<int>());
@@ -158,70 +158,70 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
 	//muon isolation variables
 	//default
-	std::auto_ptr < std::vector<double> > trkIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ecalIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hoIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > relIso03(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > trkIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ecalIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hoIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > relIso03(new std::vector<float>());
 	//bigger cone
-	std::auto_ptr < std::vector<double> > trkIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ecalIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hcalIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > hoIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > relIso05(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > trkIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ecalIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hcalIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > hoIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > relIso05(new std::vector<float>());
 
 	//muonn PF isolation variables
-	std::auto_ptr < std::vector<double> > PfChargedHadronIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfNeutralHadronIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFGammaIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso03(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfChargedHadronIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfNeutralHadronIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFGammaIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso03(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > PfChargedHadronIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfNeutralHadronIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFGammaIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso04(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfChargedHadronIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfNeutralHadronIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFGammaIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso04(new std::vector<float>());
 
 
-	std::auto_ptr < std::vector<double> > PfChargedHadronIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfNeutralHadronIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFGammaIso05(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso05(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > PfChargedHadronIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfNeutralHadronIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFGammaIso05(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso05(new std::vector<float>());
 
-	std::auto_ptr < std::vector<double> > DirectionalPFIso02(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > DirectionalPFIso02FallOff(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfRelIso02FallOff(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > DirectionalPFIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > DirectionalPFIso03FallOff(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfRelIso03FallOff(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso02(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso02FallOff(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfRelIso02FallOff(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > DirectionalPFIso03FallOff(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfRelIso03FallOff(new std::vector<float>());
 
 	//PU charged hadron isolation
-	std::auto_ptr < std::vector<double> > PfPUChargedHadronIso03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfPUChargedHadronIso04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PfPUChargedHadronIso05(new std::vector<double>());
-	
+	std::auto_ptr < std::vector<float> > PfPUChargedHadronIso03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfPUChargedHadronIso04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PfPUChargedHadronIso05(new std::vector<float>());
+
 	//new iso vars
-	std::auto_ptr < std::vector<double> > sumChargedHadronPt03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumChargedHadronPt04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumNeutralHadronPt03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumNeutralHadronPt04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumPhotonPt03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumPhotonPt04(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumPUPt03(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > sumPUPt04(new std::vector<double>());
-	
-	std::auto_ptr < std::vector<double> > PFRelIso03DeltaBeta(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > PFRelIso04DeltaBeta(new std::vector<double>());
-	
+	std::auto_ptr < std::vector<float> > sumChargedHadronPt03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumChargedHadronPt04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumNeutralHadronPt03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumNeutralHadronPt04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumPhotonPt03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumPhotonPt04(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumPUPt03(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > sumPUPt04(new std::vector<float>());
+
+	std::auto_ptr < std::vector<float> > PFRelIso03DeltaBeta(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > PFRelIso04DeltaBeta(new std::vector<float>());
+
 	//associated track
-	std::auto_ptr < std::vector<double> > trkD0(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > trkD0Error(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > trkDz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > trkDzError(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > trackValidFractionOfHits(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > trkD0(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > trkD0Error(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > trkDz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > trkDzError(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > trackValidFractionOfHits(new std::vector<float>());
 
 	//associated global track
 	std::auto_ptr < std::vector<int> > globalTrackNumberOfValidMuonHits(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > globalChi2(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > globalChi2(new std::vector<float>());
 
 	//associated inner track
 	std::auto_ptr < std::vector<int> > innerTrackNumberOfValidHits(new std::vector<int>());
@@ -231,23 +231,23 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
 	//muon vertex variables
 	std::auto_ptr < std::vector<int> > vtxIndex(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > vtxDistZ(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > primaryVertexDXY(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > primaryVertexDXYError(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > beamSpotDXY(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > beamSpotDXYError(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > vtxDistZ(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > primaryVertexDXY(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > primaryVertexDXYError(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > beamSpotDXY(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > beamSpotDXYError(new std::vector<float>());
 
 	//muon cocktail variables
-	std::auto_ptr < std::vector<double> > ctPx(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ctPy(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ctPz(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > ctPx(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ctPy(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ctPz(new std::vector<float>());
 	std::auto_ptr < std::vector<int> > ctCharge(new std::vector<int>());
 	std::auto_ptr < std::vector<int> > ctNumberOfValidTrackerHits(new std::vector<int>());
-	std::auto_ptr < std::vector<double> > ctTrkD0(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ctTrkD0Error(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ctTrkDz(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ctTrkDzError(new std::vector<double>());
-	std::auto_ptr < std::vector<double> > ctNormalizedChi2(new std::vector<double>());
+	std::auto_ptr < std::vector<float> > ctTrkD0(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ctTrkD0Error(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ctTrkDz(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ctTrkDzError(new std::vector<float>());
+	std::auto_ptr < std::vector<float> > ctNormalizedChi2(new std::vector<float>());
 
 	//-----------------------------------------------------------------
 	edm::Handle < std::vector<pat::Muon> > muons;
@@ -272,17 +272,17 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 			if (!( it->isGlobalMuon() || it->isTrackerMuon() ) )
 				continue;
 
-			double trkd0 = it->track()->d0();
+			float trkd0 = it->track()->d0();
 
 			if (beamSpotCorr && beamSpot.isValid()) {
 				trkd0 = -(it->track()->dxy(beamSpot->position()));
 			} else if (beamSpotCorr && !beamSpot.isValid())
 				edm::LogError("RootTupleMakerV2_MuonsError") << "Error! Can't get the offlineBeamSpot";
 
-			double minVtxDist3D = 9999.;
+			float minVtxDist3D = 9999.;
 			int vtxIndex_ = -1;
-//			double vtxDistXY_ = -9999.;
-			double vtxDistZ_ = -9999.;
+//			float vtxDistXY_ = -9999.;
+			float vtxDistZ_ = -9999.;
 
 			if (primaryVertices.isValid()) {
 				edm::LogInfo("RootTupleMakerV2_MuonsInfo") << "Total # Primary Vertices: " << primaryVertices->size();
@@ -290,9 +290,9 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 				for (reco::VertexCollection::const_iterator v_it = primaryVertices->begin();
 						v_it != primaryVertices->end(); ++v_it) {
 
-					double distXY = it->track()->dxy(v_it->position());
-					double distZ = it->track()->dz(v_it->position());
-					double dist3D = sqrt(pow(distXY, 2) + pow(distZ, 2));
+					float distXY = it->track()->dxy(v_it->position());
+					float distZ = it->track()->dz(v_it->position());
+					float dist3D = sqrt(pow(distXY, 2) + pow(distZ, 2));
 
 					if (dist3D < minVtxDist3D) {
 						minVtxDist3D = dist3D;
@@ -347,9 +347,9 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 				pat::IsolationKeys isokeyPFGammaIso = pat::IsolationKeys(6);
 				pat::IsolationKeys isokeyPfPUChargedHadronIso = pat::IsolationKeys(12);
 
-				double pfRelIso03(0), pfRelIso04(0), pfRelIso05(0);
-				double directionalPFIso02(0), directionalPFIso02FallOff(0), pfIso02FallOff(0);
-				double directionalPFIso03(0), directionalPFIso03FallOff(0), pfIso03FallOff(0);
+				float pfRelIso03(0), pfRelIso04(0), pfRelIso05(0);
+				float directionalPFIso02(0), directionalPFIso02FallOff(0), pfIso02FallOff(0);
+				float directionalPFIso03(0), directionalPFIso03FallOff(0), pfIso03FallOff(0);
 
 				const reco::IsoDeposit * PfChargedHadronIsolation = it->isoDeposit(isokeyPfChargedHadronIso);
 				const reco::IsoDeposit * PfNeutralHadronIsolation = it->isoDeposit(isokeyPfNeutralHadronIso);
@@ -378,7 +378,7 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 					pfRelIso03 += PfChargedHadronIsolation->depositWithin(0.3);
 					pfRelIso04 += PfChargedHadronIsolation->depositWithin(0.4);
 					pfRelIso05 += PfChargedHadronIsolation->depositWithin(0.5);
-					
+
 					sumChargedHadronPt03->push_back(it->pfIsolationR03().sumChargedHadronPt);
 					sumChargedHadronPt04->push_back(it->pfIsolationR04().sumChargedHadronPt);
 				} else
@@ -391,10 +391,10 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 					pfRelIso03 += PfNeutralHadronIsolation->depositWithin(0.3);
 					pfRelIso04 += PfNeutralHadronIsolation->depositWithin(0.4);
 					pfRelIso05 += PfNeutralHadronIsolation->depositWithin(0.5);
-					
+
 					sumNeutralHadronPt03->push_back(it->pfIsolationR03().sumNeutralHadronEt);
 					sumNeutralHadronPt04->push_back(it->pfIsolationR04().sumNeutralHadronEt);
-					
+
 				} else
 					edm::LogError("BristolNTuple_MuonsExtraError") << "Error! Can't get the isolation deposit "
 							<< "PfNeutralHadronIsolation";
@@ -405,17 +405,17 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 					pfRelIso03 += PFGammaIsolation->depositWithin(0.3);
 					pfRelIso04 += PFGammaIsolation->depositWithin(0.4);
 					pfRelIso05 += PFGammaIsolation->depositWithin(0.5);
-					
+
 					sumPhotonPt03->push_back(it->pfIsolationR03().sumPhotonEt);
 					sumPhotonPt04->push_back(it->pfIsolationR04().sumPhotonEt);
 				} else
 					edm::LogError("BristolNTuple_MuonsExtraError") << "Error! Can't get the isolation deposit "
 							<< "PFGammaIsolation";
-				
+
 				sumPUPt03->push_back(it->pfIsolationR03().sumPUPt);
 				sumPUPt04->push_back(it->pfIsolationR04().sumPUPt);
-				
-				
+
+
 				PFRelIso03->push_back(pfRelIso03 / it->pt());
 				PFRelIso04->push_back(pfRelIso04 / it->pt());
 				PFRelIso05->push_back(pfRelIso05 / it->pt());
@@ -467,7 +467,7 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 				int refit_id = -999;
 				const reco::TrackRef& cocktail_track = pmcTrack(*it, refit_id);
 
-				double cttrkd0 = cocktail_track->d0();
+				float cttrkd0 = cocktail_track->d0();
 
 				if (beamSpotCorr && beamSpot.isValid())
 					cttrkd0 = -(cocktail_track->dxy(beamSpot->position()));
@@ -533,7 +533,7 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 		iEvent.put(PfNeutralHadronIso04, prefix + "PfNeutralHadronIso04" + suffix);
 		iEvent.put(PFGammaIso04, prefix + "PFGammaIso04" + suffix);
 		iEvent.put(PFRelIso04, prefix + "PFRelIso04" + suffix);
-		
+
 
 		iEvent.put(PfChargedHadronIso05, prefix + "PfChargedHadronIso05" + suffix);
 		iEvent.put(PfNeutralHadronIso05, prefix + "PfNeutralHadronIso05" + suffix);
@@ -550,7 +550,7 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 		iEvent.put(PfPUChargedHadronIso03, prefix + "PfPUChargedHadronIso03" + suffix);
 		iEvent.put(PfPUChargedHadronIso04, prefix + "PfPUChargedHadronIso04" + suffix);
 		iEvent.put(PfPUChargedHadronIso05, prefix + "PfPUChargedHadronIso05" + suffix);
-		
+
 		//new iso vars
 		iEvent.put(sumChargedHadronPt03, prefix + "sumChargedHadronPt03" + suffix);
 		iEvent.put(sumChargedHadronPt04, prefix + "sumChargedHadronPt04" + suffix);
@@ -560,7 +560,7 @@ void BristolNTuple_Muons::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 		iEvent.put(sumPhotonPt04, prefix + "sumPhotonPt04" + suffix);
 		iEvent.put(sumPUPt03, prefix + "sumPUPt03" + suffix);
 		iEvent.put(sumPUPt04, prefix + "sumPUPt04" + suffix);
-		
+
 		iEvent.put(PFRelIso03DeltaBeta, prefix + "PFRelIso03DeltaBeta" + suffix);
 		iEvent.put(PFRelIso04DeltaBeta, prefix + "PFRelIso04DeltaBeta" + suffix);
 	}
