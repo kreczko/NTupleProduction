@@ -45,7 +45,7 @@ def getOptions( options ):
                         "Apply Jet Energy Corrections from SQLite file.")
       
       options.register('applyResiduals',
-                        True,
+                        False,
                         VarParsing.multiplicity.singleton,
                         VarParsing.varType.bool,
                         'Application of residual corrections. Have to be set' +

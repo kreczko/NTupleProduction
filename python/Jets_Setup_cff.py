@@ -38,11 +38,11 @@ def setup_jets(process, cms, options, postfix="PFlow"):
     if usePrivateSQlite:
         from CondCore.DBCommon.CondDBSetup_cfi import *
         import os
-        era = "Summer15_50nsV2_"
-        if runOnData:
-            era += 'DATA'
-        else:
-            era += 'MC'
+        era = "Summer15_50nsV2_MC"
+#         if runOnData:
+#             era += 'DATA'
+#         else:
+#             era += 'MC'
         dBFile = os.path.expandvars(
             "$CMSSW_BASE/src/BristolAnalysis/NTupleTools/data/JEC/" + era + ".db")
         print 'Using JEC from DB: {0}'.format(dBFile)
