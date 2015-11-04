@@ -12,3 +12,7 @@ CMSSW https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideHeppy
 ```
 python BristolAnalysis/NTupleTools/Configuration/create_heppy_ntuple.py
 ```
+
+## Adding event content
+In Python FWLite one can simply add event content by using `setattr(event, ...)`
+as shown in https://github.com/cbernet/cmssw/blob/heppy_7_4_12/PhysicsTools/Heppy/python/analyzers/objects/JetAnalyzer.py#L272

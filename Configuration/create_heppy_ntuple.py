@@ -5,6 +5,8 @@ from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
 # need to rename due to * import in AutoFillTreeProducer which imports the default jet type
 # which is not necessary!!!
 from BristolAnalysis.NTupleTools.objects.jets import jetType as bristolJetType
+from BristolAnalysis.NTupleTools.objects.electron import electronType as bristolElectronType
+from BristolAnalysis.NTupleTools.objects.muon import muonType as bristolMuonType
 
 # The content of the output tree is defined here
 # the definitions of the NtupleObjects are located under
@@ -12,6 +14,7 @@ from BristolAnalysis.NTupleTools.objects.jets import jetType as bristolJetType
 
 from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer import *
 from BristolAnalysis.NTupleTools.producers.event import EventProducer
+# there is no distinction between analysers and producers in Heppy
 treeProducer = cfg.Analyzer(
     class_object=EventProducer,
     verbose=False,
@@ -27,7 +30,14 @@ treeProducer = cfg.Analyzer(
     },
     collections={
         'slimmedJets': (AutoHandle(("slimmedJets",), "std::vector<pat::Jet>"),
-                        NTupleCollection("jets", bristolJetType, 99, help="jets, directly from MINIAOD")),
+                        NTupleCollection("jets", bristolJetType, 99,
+                            help="jets, directly from MINIAOD")),
+        'slimmedElectrons': (AutoHandle(("slimmedElectrons",), "std::vector<pat::Electron>"),
+                        NTupleCollection("electrons", bristolElectronType,
+                            99, help="electrons, directly from MINIAOD")),
+        'slimmedMuons': (AutoHandle(("slimmedMuons",), "std::vector<pat::Muon>"),
+                        NTupleCollection("muons", bristolMuonType,
+                            99, help="muons, directly from MINIAOD")),
     }
 )
 
@@ -45,10 +55,12 @@ output_service = cfg.Service(
     option='recreate'
 )
 
+# Use data component for data with JSON files
+# or MCComponent for MC with lumi weights (int lumi always == 1?)
 sample = cfg.Component(
     files=[
         '/hdfs/TopQuarkGroup/run2/miniAOD/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_74X_mcRun2_asymptotic_v2-v3_miniAODv2.root'],
-    name="SingleSample", isMC=False, isEmbed=False
+    name="SingleSample", isMC=True, isEmbed=False
 )
 
 
