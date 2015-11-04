@@ -64,18 +64,18 @@ cp ~/.ssh/id_rsa* <your nTuple folder>
 mv /vagrant/id_rsa* ~/.ssh/.
 # next we need a CMSSW release
 cd ~
-cmsrel CMSSW_7_4_10_patch1
+cmsrel CMSSW_7_4_12
 ```
 Because CMSSW does not like symlinks we have to exit the Vagrant box now and change the mount point.
 Edit the Vagrant file to adjust your path to your CMSSW area, i.e.
-```config.vm.synced_folder ".", "/home/vagrant/CMSSW_7_0_9_patch2/src/NTupleProduction"```
+```config.vm.synced_folder ".", "/home/vagrant/CMSSW_7_4_12/src/NTupleProduction"```
 and restart the Vagrant box (```vagrant halt && vagrant up```).
 Now ssh into the box again and go into the CMSSW src folder
 ```shell 
-cd /home/vagrant/CMSSW_7_4_10_patch1/src
+cd /home/vagrant/CMSSW_7_4_12/src
 scram b -j2
 ```
-Hooray! You are compiling a CMSSW package on your machine!
+Hooray! You are compiling a CMSSW package on your non-SL machine!
 Once you are done with the machine you can exit (```exit```) and either destroy the machine or halt it
 ```
 # to destroy 

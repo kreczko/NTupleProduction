@@ -7,3 +7,8 @@ HEPPY fork:  https://github.com/HEP-FCC/heppy
 HEPPY: https://github.com/cbernet/heppy
 Apparently https://twiki.cern.ch/twiki/bin/viewauth/FCC/FCCSoftwareHeppy, but does not exist
 CMSSW https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideHeppy
+
+## Create HEPPy NTuples
+```
+python BristolAnalysis/NTupleTools/Configuration/create_heppy_ntuple.py
+```
