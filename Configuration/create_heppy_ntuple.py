@@ -14,6 +14,7 @@ from BristolAnalysis.NTupleTools.objects.muon import muonType as bristolMuonType
 
 from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer import *
 from BristolAnalysis.NTupleTools.producers.event import EventProducer
+
 # there is no distinction between analysers and producers in Heppy
 treeProducer = cfg.Analyzer(
     class_object=EventProducer,
@@ -38,8 +39,26 @@ treeProducer = cfg.Analyzer(
         'slimmedMuons': (AutoHandle(("slimmedMuons",), "std::vector<pat::Muon>"),
                         NTupleCollection("muons", bristolMuonType,
                             99, help="muons, directly from MINIAOD")),
-    }
+    },
+    saveTLorentzVectors = True,
 )
+
+# these 'analysers' produce additinal event content
+"""
+    The LHEAnalyzer reads the externalLHEProducer::LHEEventProduct and adds 
+    lheHT, lheHTIncoming, lheNj/b/c/l/h and lheV_pt (vector boson pt)
+    to the event
+"""
+from PhysicsTools.Heppy.analyzers.gen.LHEAnalyzer import LHEAnalyzer 
+LHEAna = LHEAnalyzer.defaultConfig
+"""
+    The GeneratorAnalyser looks for Higgs, W/Z, neutrinos, leptons, taus, b quarks,
+    b-quarks from top and b-quarks from Higgs as well as W/Z quarks and leptons from top.
+    It also adds the LHE_weights
+"""
+from PhysicsTools.Heppy.analyzers.gen.GeneratorAnalyzer import GeneratorAnalyzer 
+GenAna = GeneratorAnalyzer.defaultConfig
+
 
 sequence = [treeProducer]
 
@@ -57,10 +76,11 @@ output_service = cfg.Service(
 
 # Use data component for data with JSON files
 # or MCComponent for MC with lumi weights (int lumi always == 1?)
-sample = cfg.Component(
+# kwargs for Component like isMC are not used!
+sample = cfg.MCComponent(
     files=[
         '/hdfs/TopQuarkGroup/run2/miniAOD/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_74X_mcRun2_asymptotic_v2-v3_miniAODv2.root'],
-    name="SingleSample", isMC=True, isEmbed=False
+    name="SingleSample",
 )
 
 
