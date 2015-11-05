@@ -1,5 +1,5 @@
 # data
-
+Event content produced with `edmDumpEventContent <root file>`.
 ```
 Type                                  Module                      Label             Process   
 ----------------------------------------------------------------------------------------------          
@@ -75,4 +75,20 @@ vector<reco::GenJet>                  "slimmedGenJetsAK8"         ""            
 vector<reco::GenParticle>             "prunedGenParticles"        ""                "PAT"     
 ```
 
-# data
+# Available electron IDs
+```
+The available IDs are: 
+# PHYS14
+'cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose' 'cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium'
+'cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight' 'cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto' 
+# Spring15 25ns
+'cutBasedElectronID-Spring15-25ns-V1-standalone-loose' 'cutBasedElectronID-Spring15-25ns-V1-standalone-medium'
+'cutBasedElectronID-Spring15-25ns-V1-standalone-tight' 'cutBasedElectronID-Spring15-25ns-V1-standalone-veto'
+'mvaEleID-Spring15-25ns-nonTrig-V1-wp80' 'mvaEleID-Spring15-25ns-nonTrig-V1-wp90'
+# Spring15 50ns
+'cutBasedElectronID-Spring15-50ns-V1-standalone-loose' 'cutBasedElectronID-Spring15-50ns-V1-standalone-medium'
+'cutBasedElectronID-Spring15-50ns-V1-standalone-tight' 'cutBasedElectronID-Spring15-50ns-V1-standalone-veto'
+# others
+'eidLoose' 'eidRobustHighEnergy' 'eidRobustLoose' 'eidRobustTight' 'eidTight' 'heepElectronID-HEEPV60'  .
+
+```
