@@ -1,7 +1,7 @@
 from PhysicsTools.Heppy.analyzers.core.autovars import NTupleObjectType, NTupleVariable
 from BristolAnalysis.NTupleTools.objects.lepton import leptonType
 
-electronType = NTupleObjectType(
+muonType = NTupleObjectType(
     'muon',
     baseObjectTypes = [ leptonType ],
     variables=[

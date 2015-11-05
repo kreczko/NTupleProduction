@@ -1,3 +1,4 @@
+from PhysicsTools.Heppy.analyzers.core.autovars import NTupleObjectType, NTupleVariable
 from PhysicsTools.Heppy.analyzers.objects.autophobj import fourVectorType
 
 """
