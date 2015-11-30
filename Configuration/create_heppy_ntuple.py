@@ -79,7 +79,10 @@ output_service = cfg.Service(
 # kwargs for Component like isMC are not used!
 sample = cfg.MCComponent(
     files=[
-        '/hdfs/TopQuarkGroup/run2/miniAOD/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_74X_mcRun2_asymptotic_v2-v3_miniAODv2.root'],
+        'BristolAnalysis/NTupleTools/data/test/TTJets_powhegPythia8_25ns.root',
+#         'BristolAnalysis/NTupleTools/data/test/SingleElectron25ns.root',
+#         'BristolAnalysis/NTupleTools/data/test/SingleMuon25ns.root',
+        ],
     name="SingleSample",
 )
 
