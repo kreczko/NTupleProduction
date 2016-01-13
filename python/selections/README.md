@@ -7,10 +7,10 @@ s1 = Selection(lambda x: x.hadronicOverEm() < 0.05, x = event.electrons, Selecti
 result = s1.passes(event)
 # same as s1 but selects on electron pt
 s2 = Selection(lambda x: x.pt() > 30, x = event.electrons, Selection.AtLeastOne)
-result = s2.passes(event)
+result = s2.selects(event)
 # both selections at one
 totalSelection = s1.then(s2)
-result = totalSelection.passes(event)
+result = totalSelection.selects(event)
 # either selection
 eitherSelection = s1 || s2
 ```
