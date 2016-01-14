@@ -1,5 +1,5 @@
 from collections import namedtuple
-from selection import Selection
+from selection import Selection, Criteria
 from nose2.tools.decorators import with_setup
 
 Event = namedtuple('Event', ['run', 'number', 'electrons'])
@@ -29,20 +29,19 @@ def testSimpleCut():
 @with_setup(setup)
 def testCollection():
     global e1, e2, e3, event1, event2
-    s1 = Selection(lambda x: x.hadronicOverEm < 0.05, 'electrons', Selection.AtLeastOne)
+    s1 = Selection(lambda x: x.hadronicOverEm < 0.05, 'electrons', Criteria.AtLeastOne)
     assert(s1.selects(event1))
     assert(s1.selects(event2))
     
-    s2 = Selection(lambda x: x.pt >= 30, 'electrons', Selection.AtLeastTwo)
+    s2 = Selection(lambda x: x.pt >= 30, 'electrons', Criteria.AtLeastTwo)
     assert(s2.selects(event1))
     assert(not s2.selects(event2))
     
 @with_setup(setup)
 def testSum():
-     s1 = Selection(lambda x: x.hadronicOverEm < 0.05, 'electrons', Selection.AtLeastOne)
-     s2 = Selection(lambda x: x.pt >= 30, 'electrons', Selection.AtLeastOne)
-     s3 = s1.then(s2)
-     s4 = s1 + s2
+     s1 = Selection(lambda x: x.hadronicOverEm < 0.05, 'electrons', Criteria.AtLeastOne)
+     s2 = Selection(lambda x: x.pt >= 30, 'electrons', Criteria.AtLeastOne)
+     s3 = s1 + s2
      
      assert(s3.selects(event1))
      assert(not s3.selects(event2))
