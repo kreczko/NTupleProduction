@@ -66,7 +66,12 @@ class Selection():
 
     def then(self, other):
         s = Selection(name=self._name + ', ' + other._name)
-        s._chain = [self, other]
+        if self._chain:
+            s._chain = self._chain
+        else:
+            s._chain = [self]
+        s._chain.append(other)
+
         return s
 
     def __add__(self, other):
@@ -80,3 +85,16 @@ class Selection():
 
     def efficiency(self):
         return self.n_passed() / self.n_processed()
+
+    def cutflow(self):
+        selections = []
+        if self._chain:
+            selections = self._chain
+        else:
+            selections = [self]
+        flow = []
+        for i, s in enumerate(selections):
+            if i == 0:
+                flow.append(s.n_processed())
+            flow.append(s.n_passed())
+        return flow

@@ -42,7 +42,7 @@ def testSimpleCut():
 
 @with_setup(setup)
 def testCollection():
-    global event1, event2, hoe_selection, pt_selection_2
+    global event1, event2, hoE_selection, pt_selection_2
 
     assert(hoE_selection.selects(event1))
     assert(hoE_selection.selects(event2))
@@ -53,7 +53,7 @@ def testCollection():
 
 @with_setup(setup)
 def testSum():
-    global event1, event2, hoe_selection, pt_selection
+    global event1, event2, hoE_selection, pt_selection
 
     s1 = hoE_selection + pt_selection
 
@@ -63,11 +63,19 @@ def testSum():
 
 @with_setup(setup)
 def testChain():
-    global event1, event2, hoe_selection, pt_selection
+    global event1, event2, hoE_selection, pt_selection
 
-    s3 = hoE_selection.then(low_pt_selection)
+    s1 = hoE_selection.then(low_pt_selection)
 
-    assert(s3.selects(event1))
+    assert(len(s1._chain) == 2)
+    assert(s1.selects(event1))
+    assert(s1.selects(event2))
+
+    s2 = Selection('Run range', lambda x: x.run > 1)
+    s3 = hoE_selection.then(low_pt_selection).then(s2)
+
+    assert(len(s3._chain) == 3)
+    assert(not s3.selects(event1))
     assert(s3.selects(event2))
 
 
@@ -92,7 +100,7 @@ def testSimpleCounter():
 
 @with_setup(setup)
 def testSumCounter():
-    global event1, event2, hoe_selection, pt_selection
+    global event1, event2, hoE_selection, pt_selection
     s1 = hoE_selection + pt_selection
 
     assert(s1.selects(event1))
@@ -104,21 +112,38 @@ def testSumCounter():
 
 @with_setup(setup)
 def testChainCounter():
-    global event1, event2, hoe_selection, pt_selection
- 
+    global event1, event2, hoE_selection, pt_selection
+
     s1 = hoE_selection.then(low_pt_selection)
     s2 = Selection('Run range', lambda x: x.run > 1)
     s3 = hoE_selection.then(low_pt_selection).then(s2)
- 
+
     assert(s1.selects(event1))
     assert(s1.selects(event2))
     assert(not s3.selects(event1))
     assert(s3.selects(event2))
-     
+
     assert(s1.n_processed() == 2)
     assert(s1.n_passed() == 2)
     assert(s1.efficiency() == 1)
     assert(s3.n_processed() == 2)
     assert(s3.n_passed() == 1)
     assert(s3.efficiency() == 0.5)
-    
+
+
+@with_setup(setup)
+def testCutFlow():
+    global event1, event2, hoE_selection, pt_selection
+    s1 = Selection('Run range', lambda x: x.run > 1)
+    s2 = hoE_selection.then(low_pt_selection).then(s1)
+
+    assert(len(s2._chain) == 3)
+
+    assert(not s2.selects(event1))
+    assert(s2.selects(event2))
+
+    assert(len(s2.cutflow()) == 4)
+    assert(s2.cutflow()[0] == hoE_selection.n_processed())
+    assert(s2.cutflow()[1] == hoE_selection.n_passed())
+    assert(s2.cutflow()[2] == low_pt_selection.n_passed())
+    assert(s2.cutflow()[3] == s1.n_passed())
