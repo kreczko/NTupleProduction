@@ -3,13 +3,16 @@ from collections import namedtuple
 CriteriaTuple = namedtuple('Criteria', ['AtLeastOne', 'AtLeastTwo'])
 Criteria = CriteriaTuple(lambda n: n >= 1, lambda n: n >= 2)
 
+
 class Selection():
 
-    def __init__(self, func, x='', type=1):
+    def __init__(self, name='selection', func=None, x='', type=1):
+        self._name = name
         self._func = func
         self._x = x
         self._type = type
         self._selections = [self]
+        self._chain = []
         self._grouped_selections = {}
         self._grouped_selections[x] = [self]
 
@@ -20,11 +23,21 @@ class Selection():
                 self._grouped_selections[x].append(s)
             else:
                 self._grouped_selections[x] = [s]
+        self._name += ' + ' + selection._name
         return self
 
     def selects(self, event):
-        grouped_selections = self._grouped_selections
+        if self._chain:
+            return self.__selects_with_chain__(event)
+        else:
+            return self.__selects_combined__(event)
+
+    def __selects_with_chain__(self, event):
+        return all([s.selects(event) for s in self._chain])
+
+    def __selects_combined__(self, event):
         results = []
+        grouped_selections = self._grouped_selections
         for x, group in grouped_selections.items():
             if x == '':
                 results.append(all([s._func(event) for s in group]))
@@ -44,10 +57,9 @@ class Selection():
         n_passed = result.count(True)
         return r_type(n_passed)
 
-    def then(self, other_selection):
-        s = CompositeSelection()
-        s.add_selection(self)
-        s.add_selection(other_selection)
+    def then(self, other):
+        s = Selection(name=self._name + ', ' + other._name)
+        s._chain = [self, other]
         return s
 
     def __add__(self, other):
