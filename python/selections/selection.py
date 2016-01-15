@@ -1,17 +1,17 @@
 from __future__ import division
 from collections import namedtuple, Counter
 
-CriteriaTuple = namedtuple('Criteria', ['AtLeastOne', 'AtLeastTwo'])
-Criteria = CriteriaTuple(lambda n: n >= 1, lambda n: n >= 2)
+CriteriaTuple = namedtuple('Criteria', ['NONE', 'AtLeastOne', 'AtLeastTwo'])
+Criteria = CriteriaTuple(lambda n: n >= 0, lambda n: n >= 1, lambda n: n >= 2)
 
 
 class Selection():
 
-    def __init__(self, name='selection', func=None, x='', type=1):
+    def __init__(self, name='selection', func=None, x='', criterion=Criteria.NONE):
         self._name = name
         self._func = func
         self._x = x
-        self._type = type
+        self._criterion = criterion
         self._selections = [self]
         self._chain = []
         self._grouped_selections = {}
@@ -53,14 +53,15 @@ class Selection():
                 collection_result = []
                 for e in collection:
                     collection_result.append(all([s._func(e) for s in group]))
-                r_type = Selection.resolve_type
-                criteria = [r_type(collection_result, s._type) for s in group]
+                criterion = Selection.check_criterion
+                criteria = [
+                    criterion(collection_result, s._criterion) for s in group]
                 type_result = all(criteria)
                 results.append(type_result)
         return all(results)
 
     @staticmethod
-    def resolve_type(result, r_type):
+    def check_criterion(result, r_type):
         n_passed = result.count(True)
         return r_type(n_passed)
 
@@ -76,6 +77,9 @@ class Selection():
 
     def __add__(self, other):
         return self.__add_selection__(other)
+
+    def __or__(self, other):
+        pass
 
     def n_processed(self):
         return self._counter['processed']
