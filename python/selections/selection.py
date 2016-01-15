@@ -1,4 +1,5 @@
-from collections import namedtuple
+from __future__ import division
+from collections import namedtuple, Counter
 
 CriteriaTuple = namedtuple('Criteria', ['AtLeastOne', 'AtLeastTwo'])
 Criteria = CriteriaTuple(lambda n: n >= 1, lambda n: n >= 2)
@@ -15,6 +16,7 @@ class Selection():
         self._chain = []
         self._grouped_selections = {}
         self._grouped_selections[x] = [self]
+        self._counter = Counter()
 
     def __add_selection__(self, selection):
         for s in selection._selections:
@@ -27,10 +29,15 @@ class Selection():
         return self
 
     def selects(self, event):
+        self._counter['processed'] += 1
+        result = False
         if self._chain:
-            return self.__selects_with_chain__(event)
+            result = self.__selects_with_chain__(event)
         else:
-            return self.__selects_combined__(event)
+            result = self.__selects_combined__(event)
+        if result:
+            self._counter['passed'] += 1
+        return result
 
     def __selects_with_chain__(self, event):
         return all([s.selects(event) for s in self._chain])
@@ -64,3 +71,12 @@ class Selection():
 
     def __add__(self, other):
         return self.__add_selection__(other)
+
+    def n_processed(self):
+        return self._counter['processed']
+
+    def n_passed(self):
+        return self._counter['passed']
+
+    def efficiency(self):
+        return self.n_passed() / self.n_processed()

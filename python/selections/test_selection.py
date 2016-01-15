@@ -44,34 +44,81 @@ def testSimpleCut():
 def testCollection():
     global event1, event2, hoe_selection, pt_selection_2
 
-    s1 = hoE_selection
-    assert(s1.selects(event1))
-    assert(s1.selects(event2))
+    assert(hoE_selection.selects(event1))
+    assert(hoE_selection.selects(event2))
 
-    s2 = pt_selection_2
-    assert(s2.selects(event1))
-    assert(not s2.selects(event2))
+    assert(pt_selection_2.selects(event1))
+    assert(not pt_selection_2.selects(event2))
 
 
 @with_setup(setup)
 def testSum():
     global event1, event2, hoe_selection, pt_selection
 
-    s1 = hoE_selection
-    s2 = pt_selection
-    s3 = s1 + s2
+    s1 = hoE_selection + pt_selection
 
-    assert(s3.selects(event1))
-    assert(not s3.selects(event2))
+    assert(s1.selects(event1))
+    assert(not s1.selects(event2))
 
 
 @with_setup(setup)
 def testChain():
     global event1, event2, hoe_selection, pt_selection
 
-    s1 = hoE_selection
-    s2 = low_pt_selection
-    s3 = s1.then(s2)
+    s3 = hoE_selection.then(low_pt_selection)
 
     assert(s3.selects(event1))
     assert(s3.selects(event2))
+
+
+@with_setup(setup)
+def testSimpleCounter():
+    global event1, event2, pt_selection
+
+    s1 = Selection('Run range', lambda x: x.run > 1)
+
+    pt_selection.selects(event1)
+    pt_selection.selects(event1)
+    s1.selects(event1)
+    s1.selects(event2)
+
+    assert(pt_selection.n_processed() == 2)
+    assert(pt_selection.n_passed() == 2)
+    assert(pt_selection.efficiency() == 1)
+    assert(s1.n_processed() == 2)
+    assert(s1.n_passed() == 1)
+    assert(s1.efficiency() == 0.5)
+
+
+@with_setup(setup)
+def testSumCounter():
+    global event1, event2, hoe_selection, pt_selection
+    s1 = hoE_selection + pt_selection
+
+    assert(s1.selects(event1))
+    assert(not s1.selects(event2))
+    assert(s1.n_processed() == 2)
+    assert(s1.n_passed() == 1)
+    assert(s1.efficiency() == 0.5)
+
+
+@with_setup(setup)
+def testChainCounter():
+    global event1, event2, hoe_selection, pt_selection
+ 
+    s1 = hoE_selection.then(low_pt_selection)
+    s2 = Selection('Run range', lambda x: x.run > 1)
+    s3 = hoE_selection.then(low_pt_selection).then(s2)
+ 
+    assert(s1.selects(event1))
+    assert(s1.selects(event2))
+    assert(not s3.selects(event1))
+    assert(s3.selects(event2))
+     
+    assert(s1.n_processed() == 2)
+    assert(s1.n_passed() == 2)
+    assert(s1.efficiency() == 1)
+    assert(s3.n_processed() == 2)
+    assert(s3.n_passed() == 1)
+    assert(s3.efficiency() == 0.5)
+    
