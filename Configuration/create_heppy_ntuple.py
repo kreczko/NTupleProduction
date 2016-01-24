@@ -5,6 +5,7 @@ from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
 # need to rename due to * import in AutoFillTreeProducer which imports the default jet type
 # which is not necessary!!!
 from BristolAnalysis.NTupleTools.objects.jets import jetType as bristolJetType
+from BristolAnalysis.NTupleTools.objects.particle import particleType as bristolParticleType
 from BristolAnalysis.NTupleTools.objects.electron import electronType as bristolElectronType
 from BristolAnalysis.NTupleTools.objects.muon import muonType as bristolMuonType
 
@@ -22,12 +23,15 @@ treeProducer = cfg.Analyzer(
     vectorTree=True,
     # here the list of simple event variables (floats, int) can be specified
     globalVariables=[
+                     NTupleVariable("lheNj", lambda x: x.lheNj, int, help="Number of LHE jets"),
         #              NTupleVariable("rho",  lambda ev: ev.fixedGridRhoFastjetAll, float, help="jets rho"),
         #              NTupleVariable("n_jets",  lambda ev: len(ev.slimmedJets), int, help="number of jets"),
     ],
     # here one can specify compound objects
     globalObjects={
         #           "met"    : NTupleObject("met",     metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+#         "gentopquarks" : NTupleCollection("GenTop", genParticleType, 2, help="Generated top quarks from genbquarks"),
+#         'gentopquarks': NTupleCollection("gentopquarks", bristolParticleType, 10 ),
     },
     collections={
         'slimmedJets': (AutoHandle(("slimmedJets",), "std::vector<pat::Jet>"),
@@ -60,7 +64,7 @@ from PhysicsTools.Heppy.analyzers.gen.GeneratorAnalyzer import GeneratorAnalyzer
 GenAna = GeneratorAnalyzer.defaultConfig
 
 
-sequence = [treeProducer]
+sequence = [GenAna, LHEAna, treeProducer]
 
 # use tfile service to provide a single TFile to all modules where they
 # can write any root object. If the name is 'outputfile' or the one specified in treeProducer
