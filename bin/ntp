@@ -1,0 +1,66 @@
+#! /usr/bin/env python
+
+from __future__ import print_function
+import os
+import readline
+import string
+import shlex
+import sys
+import types
+import warnings
+import importlib
+
+warnings.filterwarnings("ignore")
+
+current_path = os.path.split(__file__)[0]
+path_to_ntp = os.path.join(current_path, '..', 'python')
+
+sys.path.append(path_to_ntp)
+
+import ntp
+
+def run_cli(prompt):
+    import readline
+
+    interpreter = ntp.Interpreter()
+
+    # TODO: optional history
+
+    # tab completion
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(interpreter.auto_complete)
+
+    done = 0
+    # Start main rcli loop
+    while not done:
+        try:
+            cmd = raw_input(prompt)
+#             readline.write_history_file(histfile)
+            if cmd == 'exit':
+                done = 1
+            else:
+                rc = ntp.Interpreter.run_command(shlex.split(cmd))
+        except EOFError:
+            print()
+            done = 1
+        except KeyboardInterrupt:
+            print()
+            done = 1
+
+# If the command line is empty, open the stack shell
+if len(sys.argv) == 1:
+    # If we're piping the output through something else
+    # opening the stack shell is a bad idea. Instead
+    # just run help, and quit
+    if not sys.stdout.isatty():
+        rc = ntp.Interpreter.run_command(['help'])
+        sys.exit(rc)
+    else:
+        os.environ['TERM'] = 'vt100'
+        import readline
+        run_cli('{0} > '.format((os.path.basename(sys.argv[0]))))
+else:
+    args = sys.argv[1:]
+    rc = ntp.Interpreter.run_command(args)
+    sys.exit(rc)
+
