@@ -1,22 +1,23 @@
 from __future__ import print_function
-from collections import namedtuple
-import importlib
+import readline
+import string
 import os
-import types
 import shlex
+import importlib
+import types
 import sys
+
+PROMPT = 'ntp > '
+HISTFILE = os.path.expanduser('~/.ntp_history')
+COMPLETEKEY = 'tab'
 
 CURRENT_PATH = os.path.split(__file__)[0]
 PATH_TO_NTP = os.path.join(CURRENT_PATH, '..')
-BASE_MODULE_PATH = 'ntp.commands'
-
-sys.path.append(PATH_TO_NTP)
-
-CommandHierarchy = namedtuple('CommandHierarchy', ['isExecutable', 'children'])
+BASE_MODULE = 'ntp.commands'
 
 
-def get_modules(command_path):
-    '''
+def get_commands(command_path):
+    """
         Reads the folder sub-structure of ntp/commands and 
         returns all found modules that contain a Command class.
 
@@ -25,181 +26,104 @@ def get_modules(command_path):
         ntp/commands/list/Y
         ntp/commands/run/X
         is mapped onto
-        [
-            'ntp.commands.list.X'
-            'ntp.commands.list.Y'
-            'ntp.commands.run.X'
-        ]
+        {
+            'ntp.commands.list.X': Command class
+            'ntp.commands.list.Y': Command class
+            'ntp.commands.run.X': Command class
+        }
 
-    '''
-    modules = []
+    """
+    modules = {}
     for p, _, _ in os.walk(command_path):
-        module_path = os.path.relpath(p, command_path)
+        relative_path = os.path.relpath(p, command_path)
         # If it's the current directory, ignore
-        if module_path == '.':
+        if relative_path == '.':
             continue
 
         # Convert directory structure to module path
-        module_path = module_path.replace('/', '.')
-        module_path = '{0}.{1}'.format(BASE_MODULE_PATH, module_path)
+        relative_path = relative_path.replace('/', '.')
+        absolute_path = '{0}.{1}'.format(BASE_MODULE, relative_path)
         try:
-            mod = importlib.import_module(module_path)
+            mod = importlib.import_module(absolute_path)
             if hasattr(mod, 'Command'):
                 if type(mod.Command) is types.ClassType:
-                    modules.append(module_path)
+                    modules[relative_path] = mod.Command
         except ImportError, e:
-            print('Exception', e)
             continue
 
     return modules
 
 
-def get_command_hierarchy(modules):
-    '''
-        Creates a hierarchy from a list of modules
-        [
-            'ntp.commands.list.X'
-            'ntp.commands.list.Y'
-            'ntp.commands.run.X'
-        ]
-
-        will be mapped to
-        hierarchy = { 
-            'ntp': {
-                'commands': {
-                    'list': {'X': Command, 'Y': Command},
-                    'run': {'X':Command}
-                    }
-                }
-            } 
-    '''
-    hiera = CommandHierarchy(False, {})
-    for mod in modules:
-        temp = hiera
-        mod_split = mod.split('.')
-
-        n_levels = len(mod_split)
-
-        for i, m in enumerate(mod_split):
-            if not m in temp.children:
-                # Set last module as a runnable command
-                isExecutable = i == (n_levels - 1)
-                temp.children[m] = CommandHierarchy(isExecutable, {})
-            temp = temp.children[m]
-
-    return hiera
-
-
-def traverse_hierarchy(hierarchy, tokens, incomplete):
-    results = []
-    if not hierarchy.children:
-        return results
-
-    if len(tokens) > 1:
-        t = tokens.pop(0)
-        if t in hierarchy.children:
-            child = hierarchy.children[t]
-            results.extend(traverse_hierarchy(child, tokens, incomplete))
-    elif len(tokens) == 1:
-        t = tokens.pop(0)
-        if t in hierarchy.children:
-            child = hierarchy.children[t]
-            if incomplete:
-                results.append(t)
-            else:
-                if child.isCommand and hierarchy.children:
-                    results.append('')
-                results.extend(traverse_hierarchy(child, tokens, incomplete))
-        else:
-            for child in hierarchy.children:
-                if child.startswith(t):
-                    results.append(child)
-    else:
-        for child in hierarchy.children:
-            results.append(child)
-
-
-def print_hierarchy(hierarchy, indent=0):
-    for key, value in hierarchy.children.items():
-        print('  ' * indent + str(key))
-        if isinstance(value, CommandHierarchy):
-            print_hierarchy(value, indent + 1)
-        else:
-            print('  ' * (indent + 1) + str(value))
-
-
-class Interpreter:
+class Interpreter():
 
     def __init__(self):
         self.command_path = os.path.join(CURRENT_PATH, 'commands')
-        self.modules = get_modules(self.command_path)
-        self.hierarchy = get_command_hierarchy(self.modules)
+        self.commands = get_commands(self.command_path)
 
-    def auto_complete(self,  token, state):
-        line_buffer = readline.get_line_buffer()
-        incomplete = not (len(line_buffer) > 0 and line_buffer[-1] == ' ')
-        tokens = line_buffer.split()
-        results = []
-        results = traverse_hierarchy(self.cmd_hierararchy, tokens, incomplete)
-        results = [r + ' ' for r in results]
+    def complete(self, text, state):
+        pass
 
-        return results[state]
-
-    @staticmethod
-    def run_command(args):
-        if not args:
-            return
-
-        module = None
-        rc = False
-        cmd = args[0].split()
-
-        if len(cmd) > 1:
-            module_path = '{0}.{1}'.format(BASE_MODULE_PATH, '.'.join(cmd))
-            try:
-                module = importlib.import_module(module_path)
-            except ImportError, e:
-                module = None
-
-        if module is None:
-            for i in range(len(args), 0, -1):
-                module_path = '{0}.{1}'.format(
-                    BASE_MODULE_PATH, '.'.join(args[:i]))
-                try:
-                    module = importlib.import_module(module_path)
-                    if module:
-                        break
-                except ImportError:
-                    continue
-
-        if not module:
-            sys.stderr.write('Error - Invalid command "{0}"\n'.format(args[0]))
-            return -1
-        name = ' '.join(module_path.split('.')[2:])
-
-        if not hasattr(module, 'Command'):
-            print('HELP!')
-            return -1
-
+    def execute(self, relative_path, args):
         try:
-            command = getattr(module, 'Command')()
-            rc = command.run()
+            command_class = self.commands[relative_path]
+            command = command_class()
+            rc = command.run(args)
         except:
-            print('Command failed')
+            print('Command failed', file=sys.stderr)
 
-        # TODO, get any output from the command
-        output = ''
-        if len(output) > 0:
-            print(output, end='')
-            if output[len(output) - 1] != '\n':
+        text = command.get_text()
+        if len(text) > 0:
+            print(text, end='')
+            if text[len(text) - 1] != '\n':
                 print()
-
         if rc is True:
             return 0
         return -1
 
 
-if __name__ == '__main__':
-    #     i = Interpreter()
-    #     print_hierarchy(i.hierarchy)
-    run_cli('ntp > ')
+def run_cli(prompt=PROMPT):
+    """ sets up command line interface"""
+    interpreter = Interpreter()
+
+    readline.set_completer(interpreter.complete)
+    readline.parse_and_bind(COMPLETEKEY + ": complete")
+
+    done = 0
+    while not done:
+        try:
+            cmd = raw_input(prompt)
+            readline.write_history_file(HISTFILE)
+            if cmd in ['exit', 'quit', 'q']:
+                run_command(['quit'])
+                done = 1
+            else:
+                run_command(shlex.split(cmd))
+        except EOFError:
+            print()
+            done = 1
+        except KeyboardInterrupt:
+            print()
+            done = 1
+
+
+def run_command(args):
+    if not args:
+        return
+
+    found_command = False
+    interpreter = Interpreter()
+    print('Known commands:\n', '\n '.join(interpreter.commands.keys()))
+    # loop (backwards) through all parameters and find the correct command
+    for i in range(len(args), 0, -1):
+        relative_path = '.'.join(args[:i])
+        if relative_path in interpreter.commands:
+            found_command = True
+            break
+
+    if not found_command:
+        print('Error - Invalid command "{0}"'.format(args[0]), file=sys.stderr)
+        return -1
+
+    print('found command', relative_path)
+
+    interpreter.execute(relative_path, args)
