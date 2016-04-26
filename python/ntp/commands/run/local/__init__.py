@@ -1,5 +1,5 @@
 """
-    local:    runs a specified job on the machine running this command
+    run local:    runs a specified job on the machine running this command
 """
 from __future__ import print_function
 import ntp.commands

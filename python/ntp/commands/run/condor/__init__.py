@@ -1,5 +1,5 @@
 """
-    condor:    Submits requested job to the HTCondor cluster
+    run condor:    Submits requested job to the HTCondor cluster
 """
 from __future__ import print_function
 import ntp.commands

@@ -1,5 +1,5 @@
 """
-    grid:    Uses CRAB3 to submit jobs to the WLCG grid
+    run grid:    Uses CRAB3 to submit jobs to the WLCG grid
 """
 from __future__ import print_function
 import ntp.commands

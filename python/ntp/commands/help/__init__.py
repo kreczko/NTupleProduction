@@ -1,5 +1,6 @@
 """
-    help:   lists help for available commands
+    help:   Lists help for available commands. Pass a command as parameter
+            to get the help for just that command
             Usage:
                 help [command]
 """
@@ -17,7 +18,20 @@ class Command(ntp.commands.Command):
 
     def run(self, args, variables):
         from ntp.interpreter import HIERARCHY
-        self.__text = self.__collect_help_text(HIERARCHY, 'COMMANDS:')
+
+        if not args:
+            # print everything
+            self.__text = self.__collect_help_text(HIERARCHY, 'COMMANDS:')
+        else:
+            tmp = HIERARCHY
+            for arg in args:
+                if arg in tmp:
+                    tmp = tmp[arg]
+                else:
+                    self.__text = 'Could not find command "' + \
+                        ' '.join(args) + '"'
+                    return False
+            self.__text = self.__collect_help_text(tmp, 'COMMAND:')
 
         return True
 
