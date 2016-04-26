@@ -1,6 +1,6 @@
 """
     list:   Used to list things. By default it will list the things to list
-            Usage:
+        Usage:
                 list <thing to list>
 """
 import ntp.commands

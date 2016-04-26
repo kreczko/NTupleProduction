@@ -3,9 +3,14 @@ import readline
 import string
 import os
 import shlex
-import importlib
 import types
 import sys
+
+try:
+    import importlib
+    import_module = importlib.import_module
+except:
+    import_module = __import__
 
 PROMPT = 'ntp > '
 HISTFILE = os.path.expanduser('~/.ntp_history')
@@ -62,7 +67,10 @@ def __get_commands(command_path):
         relative_path = relative_path.replace('/', '.')
         absolute_path = '{0}.{1}'.format(BASE_MODULE, relative_path)
         try:
-            mod = importlib.import_module(absolute_path)
+            if sys.version_info < (2, 7):
+                mod = import_module(absolute_path, fromlist=['Command'])
+            else:
+                mod = import_module(absolute_path)
             if hasattr(mod, 'Command'):
                 if type(mod.Command) is type(object):
                     commands[relative_path] = mod.Command

@@ -1,12 +1,11 @@
 """
     help:   Lists help for available commands. Pass a command as parameter
             to get the help for just that command
-            Usage:
+        Usage:
                 help [command]
 """
 from __future__ import print_function
 import ntp.commands
-import importlib
 import ntp.interpreter
 import textwrap
 

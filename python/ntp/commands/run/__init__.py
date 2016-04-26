@@ -3,10 +3,15 @@
             All run commands require a valid grid certificate as they
             either read data from the grid via XRootD or run on grid
             resources.
-            Usage:
-                run [grid|condor|local] [sample=X]
-            default:
-                run local sample=Test
+        Usage:
+            run [<where>] [sample=<X>]
+        Parameters:
+            where:    Where to run NTP. Can be grid|condor|local.
+                      For location specific parameters, please run
+                        help run <where>
+                      Default: local
+            sample:   Which sample to run over.
+                      Default: test
 """
 
 import ntp.commands
