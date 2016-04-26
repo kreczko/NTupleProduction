@@ -17,17 +17,17 @@ current_path = os.path.split(__file__)[0]
 path_to_ntp = os.path.join(current_path, '..', 'python')
 sys.path.append(path_to_ntp)
 
-import ntp
+import ntp as custom_python_shell
 
 if len(sys.argv) == 1:
     if not sys.stdout.isatty():
-        rc = ntp.run_command(['help'])
+        rc = custom_python_shell.run_command(['help'])
         sys.exit(rc)
     else:
         os.environ['TERM'] = 'vt100'
-        ntp.run_cli('{0} > '.format((os.path.basename(sys.argv[0]))))
+        name_of_this_script = os.path.basename(sys.argv[0])
+        custom_python_shell.run_cli('{0} > '.format(name_of_this_script))
 else:
     args = sys.argv[1:]
-    rc = ntp.run_command(args)
+    rc = custom_python_shell.run_command(args)
     sys.exit(rc)
-

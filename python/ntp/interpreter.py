@@ -9,14 +9,17 @@ import sys
 
 PROMPT = 'ntp > '
 HISTFILE = os.path.expanduser('~/.ntp_history')
+LOGFILE = os.path.expanduser('~/.ntp_log')
 COMPLETEKEY = 'tab'
 
 CURRENT_PATH = os.path.split(__file__)[0]
+COMMAND_PATH = os.path.join(CURRENT_PATH, 'commands')
+
 PATH_TO_NTP = os.path.join(CURRENT_PATH, '..')
 BASE_MODULE = 'ntp.commands'
 
 
-def get_commands(command_path):
+def __get_commands(command_path):
     """
         Reads the folder sub-structure of ntp/commands and 
         returns all found modules that contain a Command class.
@@ -33,7 +36,8 @@ def get_commands(command_path):
         }
 
     """
-    modules = {}
+    commands = {}
+    hierarchy = {}
     for p, _, _ in os.walk(command_path):
         relative_path = os.path.relpath(p, command_path)
         # If it's the current directory, ignore
@@ -46,46 +50,87 @@ def get_commands(command_path):
         try:
             mod = importlib.import_module(absolute_path)
             if hasattr(mod, 'Command'):
-                if type(mod.Command) is types.ClassType:
-                    modules[relative_path] = mod.Command
+                if type(mod.Command) is type(object):
+                    commands[relative_path] = mod.Command
         except ImportError, e:
             continue
 
-    return modules
+    return commands
+
+COMMANDS = __get_commands(COMMAND_PATH)
 
 
-class Interpreter():
+def __complete(self, text, state):
+    pass
 
-    def __init__(self):
-        self.command_path = os.path.join(CURRENT_PATH, 'commands')
-        self.commands = get_commands(self.command_path)
 
-    def complete(self, text, state):
+def __execute(command, parameters, variables):
+    rc = False
+    try:
+        rc = command.run(parameters, variables)
+    except Exception, e:
+        print('Command failed: ' + str(e), file=sys.stderr)
+
+    text = command.get_text()
+    if len(text) > 0:
+        print(text, end='')
+        if text[len(text) - 1] != '\n':
+            print()
+    if rc is True:
+        return 0
+    return -1
+
+
+def _convert(value):
+    """
+        Converts a string value to either bool, int or float as applicable
+    """
+    s = str(value).strip().lower()
+    if s in ['false', 'n', '0']:
+        return False
+    if s in ['true', 'y', '1']:
+        return True
+
+    # next try float
+    try:
+        f = float(s)
+        return f
+    except ValueError:
         pass
 
-    def execute(self, relative_path, args):
-        try:
-            command_class = self.commands[relative_path]
-            command = command_class()
-            rc = command.run(args)
-        except:
-            print('Command failed', file=sys.stderr)
+    # otherwise assume string
+    return value
 
-        text = command.get_text()
-        if len(text) > 0:
-            print(text, end='')
-            if text[len(text) - 1] != '\n':
-                print()
-        if rc is True:
-            return 0
-        return -1
+
+def _parse_args(args):
+    positional_args = []
+    variables = {}
+    for arg in args:
+        if '=' in arg:
+            name, value = arg.split('=')
+
+            variables[name] = _convert(value)
+        else:
+            positional_args.append(arg)
+    return positional_args, variables
+
+
+def _find_command_and_args(cli_input):
+    command = None
+    args = []
+    for i in range(len(cli_input), 0, -1):
+        relative_path = '.'.join(cli_input[:i])
+        if relative_path in COMMANDS:
+            command = COMMANDS[relative_path]()
+            args = cli_input[i:]
+            break
+    return command, args
 
 
 def run_cli(prompt=PROMPT):
     """ sets up command line interface"""
-    interpreter = Interpreter()
 
-    readline.set_completer(interpreter.complete)
+    readline.set_completer(__complete)
     readline.parse_and_bind(COMPLETEKEY + ": complete")
 
     done = 0
@@ -111,19 +156,15 @@ def run_command(args):
         return
 
     found_command = False
-    interpreter = Interpreter()
-    print('Known commands:\n', '\n '.join(interpreter.commands.keys()))
     # loop (backwards) through all parameters and find the correct command
-    for i in range(len(args), 0, -1):
-        relative_path = '.'.join(args[:i])
-        if relative_path in interpreter.commands:
-            found_command = True
-            break
+    command, arguments = _find_command_and_args(args)
+    parameters, variables = _parse_args(arguments)
 
-    if not found_command:
+    if command is None:
         print('Error - Invalid command "{0}"'.format(args[0]), file=sys.stderr)
+        print('Known commands:\n', '\n '.join(COMMANDS.keys()))
         return -1
 
-    print('found command', relative_path)
-
-    interpreter.execute(relative_path, args)
+    # log command
+    # execute
+    __execute(command, parameters, variables)

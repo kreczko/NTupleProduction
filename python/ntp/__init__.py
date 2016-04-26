@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-from .interpreter import Interpreter
 from .interpreter import run_cli
 from .interpreter import run_command
 
