@@ -19,6 +19,19 @@ PATH_TO_NTP = os.path.join(CURRENT_PATH, '..')
 BASE_MODULE = 'ntp.commands'
 
 
+def __build_hierarchy(hierarchy, path, command):
+    import collections
+    if '.' in path:
+        elements = path.split('.')
+        current = elements[0]
+        if not current in hierarchy:
+            hierarchy[current] = collections.OrderedDict()
+        new_path = '.'.join(elements[1:])
+        __build_hierarchy(hierarchy[current], new_path, command)
+    else:
+        hierarchy[path] = collections.OrderedDict([('this', command)])
+
+
 def __get_commands(command_path):
     """
         Reads the folder sub-structure of ntp/commands and 
@@ -36,9 +49,10 @@ def __get_commands(command_path):
         }
 
     """
-    commands = {}
-    hierarchy = {}
-    for p, _, _ in os.walk(command_path):
+    import collections
+    commands = collections.OrderedDict()
+    hierarchy = collections.OrderedDict()
+    for p, _, _ in sorted(os.walk(command_path)):
         relative_path = os.path.relpath(p, command_path)
         # If it's the current directory, ignore
         if relative_path == '.':
@@ -52,12 +66,13 @@ def __get_commands(command_path):
             if hasattr(mod, 'Command'):
                 if type(mod.Command) is type(object):
                     commands[relative_path] = mod.Command
+                    __build_hierarchy(hierarchy, relative_path, mod.Command)
         except ImportError, e:
             continue
 
-    return commands
+    return commands, hierarchy
 
-COMMANDS = __get_commands(COMMAND_PATH)
+COMMANDS, HIERARCHY = __get_commands(COMMAND_PATH)
 
 
 def __complete(self, text, state):

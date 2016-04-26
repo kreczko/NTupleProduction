@@ -1,5 +1,5 @@
 """
-    quit:    Exists the custom shell
+    quit:    Exits the custom shell
 """
 
 

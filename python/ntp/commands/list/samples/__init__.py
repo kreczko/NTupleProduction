@@ -1,5 +1,5 @@
 """
-    samples: lists all available samples
+    samples:    lists all available samples
 """
 import ntp.commands
 

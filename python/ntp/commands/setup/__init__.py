@@ -1,5 +1,5 @@
 """
-    setup: sets up the workspace area with CMSSW and the dependencies
+    setup:    sets up the workspace area with CMSSW and the dependencies
 """
 
 from __future__ import print_function
