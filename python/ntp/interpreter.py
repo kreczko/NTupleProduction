@@ -20,18 +20,32 @@ COMPLETEKEY = 'tab'
 CURRENT_PATH = os.path.split(__file__)[0]
 COMMAND_PATH = os.path.join(CURRENT_PATH, 'commands')
 
-PATH_TO_NTP = os.path.join(CURRENT_PATH, '..')
+PATH_TO_BASE = os.path.join(CURRENT_PATH, '..')
 BASE_MODULE = 'ntp.commands'
 
 
 def __build_hierarchy(hierarchy, path, command):
+    """
+        Builds a hierarchy from a python import path,
+        e.g. run.condor.test will be parsed into a dictionary of
+        {"run":{
+            "this": <command>, # if "run" is a valid command by itself
+            "condor":{
+                "test": {
+                    "this": <command>
+                    }
+                }
+            }
+        }
+    """
     import collections
-    if '.' in path:
-        elements = path.split('.')
+    path = path.replace('.', ' ')
+    if ' ' in path:
+        elements = path.split(' ')
         current = elements[0]
         if not current in hierarchy:
             hierarchy[current] = collections.OrderedDict()
-        new_path = '.'.join(elements[1:])
+        new_path = ' '.join(elements[1:])
         __build_hierarchy(hierarchy[current], new_path, command)
     else:
         hierarchy[path] = collections.OrderedDict([('this', command)])
@@ -39,10 +53,10 @@ def __build_hierarchy(hierarchy, path, command):
 
 def __get_commands(command_path):
     """
-        Reads the folder sub-structure of ntp/commands and 
+        Reads the folder sub-structure of ntp/commands and
         returns all found modules that contain a Command class.
 
-        The folder structure 
+        The folder structure
         ntp/commands/list/X
         ntp/commands/list/Y
         ntp/commands/run/X
@@ -83,8 +97,54 @@ def __get_commands(command_path):
 COMMANDS, HIERARCHY = __get_commands(COMMAND_PATH)
 
 
-def __complete(self, text, state):
-    pass
+def __traverse(commands, tokens, incomplete, results=[]):
+    """
+        traverses through a sub-hierarchy of the commands
+        Results are writtend into the 'results' parameter.
+    """
+    IGNORE_KEYS = ['this']
+    if not commands or commands.keys() == IGNORE_KEYS:  # end of hierarchy
+        return
+    n_tokens = len(tokens)
+    if n_tokens > 1:
+        t = tokens.pop(0)
+        if t in commands:
+            __traverse(commands[t], tokens, incomplete, results)
+    elif n_tokens == 1:
+        t = tokens.pop(0)
+        if t in commands and not t in IGNORE_KEYS:
+            current = commands[t]
+            if incomplete:
+                results.append(t)
+            else:
+                if len(current) > 0:
+                    results.append('')
+                __traverse(current, tokens, incomplete, results)
+        else:
+            for command in commands:
+                if command.startswith(t) and not command in IGNORE_KEYS:
+                    results.append(command)
+    elif n_tokens == 0:
+        for command in commands:
+            if not command in IGNORE_KEYS:
+                results.append(command)
+
+
+def __complete(text, state):
+    """
+        autocompletes partial commands
+    """
+    buffer = readline.get_line_buffer()
+    incomplete = True
+    if len(buffer) > 0 and buffer[-1] == ' ':
+        incomplete = False
+    tokens = buffer.split()
+
+    results = []
+    __traverse(HIERARCHY, tokens, incomplete, results)
+    f = lambda x: x + ' '
+    results = map(f, results)
+    return results[state]
 
 
 def __execute(command, parameters, variables):
