@@ -10,5 +10,5 @@ class Command(C):
     def __init__(self, path=__file__, doc=__doc__):
         super(Command, self).__init__(path, doc)
 
-    def run(self):
+    def run(self, args, variables):
         print("Bye, bye!")

@@ -5,6 +5,14 @@
 """
 from .. import Command as C
 
+
 class Command(C):
-    def __init__(self, path = __file__, doc = __doc__):
+
+    def __init__(self, path=__file__, doc=__doc__):
         super(Command, self).__init__(path, doc)
+
+    def run(self, args, variables):
+        from ntp.commands.help import Command
+        c = Command()
+        c.run(['list'], variables)
+        self.__text = c.get_text()
