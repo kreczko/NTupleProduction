@@ -5,18 +5,18 @@
                 help [command]
 """
 from __future__ import print_function
-import ntp.commands
-import ntp.interpreter
+from .. import Command as C
 import textwrap
 
 
-class Command(ntp.commands.Command):
+class Command(C):
 
     def __init__(self, path=__file__, doc=__doc__):
         super(Command, self).__init__(path, doc)
 
     def run(self, args, variables):
-        from ntp.interpreter import HIERARCHY
+        import ntp.interpreter
+        HIERARCHY = ntp.interpreter.HIERARCHY
 
         if not args:
             # print everything

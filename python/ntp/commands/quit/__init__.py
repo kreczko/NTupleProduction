@@ -4,10 +4,11 @@
 
 
 from __future__ import print_function
-import ntp.commands
+from .. import Command as C
 
 
-class Command(ntp.commands.Command):
+
+class Command(C):
 
     def __init__(self, path=__file__, doc=__doc__):
         super(Command, self).__init__(path, doc)

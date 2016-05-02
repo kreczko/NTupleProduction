@@ -19,7 +19,7 @@ import sys
 import optparse
 import subprocess
 
-import ntp.commands
+from .. import Command as C
 
 
 def setup_cmssw(workspace, version):
@@ -99,7 +99,7 @@ def compile_workspace(workspace, n_jobs=1):
     subprocess.call(all_in_one, shell=True)
 
 
-class Command(ntp.commands.Command):
+class Command(C):
 
     DEFAULTS = {
         'force': False,

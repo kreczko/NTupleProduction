@@ -14,10 +14,10 @@
                       Default: test
 """
 
-import ntp.commands
+from .. import Command as C
 
 
-class Command(ntp.commands.Command):
+class Command(C):
     REQUIRE_GRID_CERT = True
 
     def __init__(self, path=__file__, doc=__doc__):

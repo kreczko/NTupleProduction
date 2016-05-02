@@ -1,9 +1,9 @@
 """
     list samples:    lists all available samples
 """
-import ntp.commands
+from .. import Command as C
 
-class Command(ntp.commands.list.Command):
+class Command(C):
     def __init__(self, path = __file__, doc = __doc__):
         super(Command, self).__init__(path, doc)
 
