@@ -22,9 +22,11 @@ class Command(C):
 
     def __init__(self, path=__file__, doc=__doc__):
         super(Command, self).__init__(path, doc)
-        
+
     def run(self, args, variables):
         from .local import Command
         c = Command()
-        c.run(args, variables)
+        result = c.run(args, variables)
         self.__text = c.get_text()
+
+        return result

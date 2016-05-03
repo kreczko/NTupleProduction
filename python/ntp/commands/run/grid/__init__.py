@@ -11,4 +11,7 @@ class Command(C):
         super(Command, self).__init__(path, doc)
 
     def run(self, args, variables):
-        print("Running on the grid")
+        self.__prepare(args, variables)
+        self.__text = "NOT IMPLEMENTED - but would be running on the grid"
+
+        return True

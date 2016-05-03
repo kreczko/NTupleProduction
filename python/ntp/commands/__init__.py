@@ -2,7 +2,7 @@ import os
 
 
 class Command(object):
-    """Base class for all NTP commands"""
+    """Base class for all commands"""
     REQUIRE_GRID_CERT = False
     DEFAULTS = {}
 
@@ -24,7 +24,10 @@ class Command(object):
         """
             Runs the commands and an exit code (True if everything went OK)
         """
-        self.__set_variables(variables)
+        self.__prepare(args, variables)
+        self.__text = "NOT IMPLEMENTED"
+
+        return True
 
     def help(self):
         """Returns a little help text with the description of the command."""
@@ -46,3 +49,6 @@ class Command(object):
         for name, value in variables.items():
             if name in variables:
                 self.__variables[name] = value
+
+    def __prepare(self, args, variables):
+        self.__set_variables(variables)

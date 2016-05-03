@@ -17,6 +17,7 @@ class Command(C):
     def run(self, args, variables):
         import ntp.interpreter
         HIERARCHY = ntp.interpreter.HIERARCHY
+        self.__prepare(args, variables)
 
         if not args:
             # print everything

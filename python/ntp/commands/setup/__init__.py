@@ -114,7 +114,7 @@ class Command(C):
             self.__text = "Could not find environmental variable 'NTPROOT'\n"
             self.__text += "You need to run 'source bin/env.sh' first!"
 
-        super(Command, self).run(args, variables)
+        self.__prepare(args, variables)
 
         NTPROOT = os.environ['NTPROOT']
         ntp_tag = 'run2:latest'  # == master
@@ -146,6 +146,8 @@ class Command(C):
             link_ntp(cmssw_workspace, destination, links)
 
             compile_workspace(cmssw_workspace)
+
+        return True
 
     def __is_ready_to_go(self):
         return 'NTPROOT' in os.environ

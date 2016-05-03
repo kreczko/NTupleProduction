@@ -14,3 +14,5 @@ class Command(C):
     def run(self, args, variables):
         self.__prepare(args, variables)
         self.__text = "NOT IMPLEMENTED"
+
+        return True

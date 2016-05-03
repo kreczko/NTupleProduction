@@ -19,4 +19,7 @@ class Command(C):
         super(Command, self).__init__(path, doc)
 
     def run(self, args, variables):
-        print("Running locally")
+        self.__prepare(args, variables)
+        self.__text = "NOT IMPLEMENTED - but would be running locally"
+
+        return True

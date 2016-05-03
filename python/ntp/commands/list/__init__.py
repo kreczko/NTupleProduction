@@ -12,6 +12,7 @@ class Command(C):
         super(Command, self).__init__(path, doc)
 
     def run(self, args, variables):
+        self.__prepare(args, variables)
         from ntp.commands.help import Command
         c = Command()
         c.run(['list'], variables)
