@@ -60,7 +60,8 @@ else
 fi
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-source /cvmfs/cms.cern.ch/crab3/crab.sh
+# https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3Releases#Improvements_enhancements_change
+source /cvmfs/cms.cern.ch/crab3/crab_light.sh
 
 unset old_ntpbase
 unset envscript
