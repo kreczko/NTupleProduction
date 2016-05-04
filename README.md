@@ -15,7 +15,7 @@ To setup the code:
 export GITHUBUSERNAME=yourGITHUBUsername
 git config --global user.github $GITHUBUSERNAME
 #on soolin:
-export CMSSW_GIT_REFERENCE=/storage/.cmsgit-cache
+export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git
 
 
 # Set up the CMSSW release

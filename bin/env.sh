@@ -62,6 +62,7 @@ fi
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3Releases#Improvements_enhancements_change
 source /cvmfs/cms.cern.ch/crab3/crab_light.sh
+export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git
 
 unset old_ntpbase
 unset envscript
