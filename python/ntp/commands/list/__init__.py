@@ -15,5 +15,7 @@ class Command(C):
         self.__prepare(args, variables)
         from ntp.commands.help import Command
         c = Command()
-        c.run(['list'], variables)
+        result = c.run(['list'], variables)
         self.__text = c.get_text()
+
+        return result
