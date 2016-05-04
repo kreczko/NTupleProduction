@@ -99,6 +99,24 @@ def compile_workspace(workspace, n_jobs=1):
     subprocess.call(all_in_one, shell=True)
 
 
+def get_metadata():
+    NTPROOT = os.environ['NTPROOT']
+    metadata = {}
+    with open(NTPROOT + '/metadata.json') as metadata_file:
+        metadata = json.load(metadata_file)
+    return metadata
+
+
+def get_cmssw_workspace():
+    NTPROOT = os.environ['NTPROOT']
+    metadata = get_metadata()
+
+    workspace = '{root}/workspace/{cmssw_version}/src'
+    workspace = workspace.format(
+        root=NTPROOT, cmssw_version=metadata['cmssw_version'])
+    return workspace
+
+
 class Command(C):
 
     DEFAULTS = {
@@ -121,31 +139,37 @@ class Command(C):
         if args:
             ntp_tag = args[0]
 
-        with open(NTPROOT + '/metadata.json') as metadata_file:
-            metadata = json.load(metadata_file)
-            workspace = NTPROOT + '/workspace'
+        metadata = get_metadata()
+        workspace = NTPROOT + '/workspace'
 
-            if os.path.exists(workspace):
-                print('Workspace already exists')
-                if self.__variables['force']:
-                    print('Deleting existing workspace')
-                    shutil.rmtree(workspace)
-                else:
-                    sys.exit(-1)
+        if os.path.exists(workspace):
+            print('Workspace already exists')
+            if self.__variables['force']:
+                print('Deleting existing workspace')
+                if os.path.exists(workspace + '.save'):
+                    shutil.rmtree(workspace + '.save')
+                shutil.move(workspace, workspace + '.save')
+            else:
+                sys.exit(-1)
 
-            os.mkdir(workspace)
-            cmssw_version = metadata['cmssw_version']
-            setup_cmssw(workspace, cmssw_version)
+        print('Creating workspace')
+        os.mkdir(workspace)
+        os.mkdir(workspace + '/cache')
+        os.mkdir(workspace + '/log')
+        os.mkdir(workspace + '/results')
+        os.mkdir(workspace + '/tmp')
+        cmssw_version = metadata['cmssw_version']
+        setup_cmssw(workspace, cmssw_version)
 
-            cmssw_workspace = workspace + '/{0}/src'.format(cmssw_version)
-            dependencies = metadata['dependencies']
-            setup_dependencies(cmssw_workspace, dependencies)
+        cmssw_workspace = workspace + '/{0}/src'.format(cmssw_version)
+        dependencies = metadata['dependencies']
+        setup_dependencies(cmssw_workspace, dependencies)
 
-            destination = metadata['destination']
-            links = metadata['links']
-            link_ntp(cmssw_workspace, destination, links)
+        destination = metadata['destination']
+        links = metadata['links']
+        link_ntp(cmssw_workspace, destination, links)
 
-            compile_workspace(cmssw_workspace)
+        compile_workspace(cmssw_workspace)
 
         return True
 
