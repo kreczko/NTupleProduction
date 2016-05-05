@@ -8,5 +8,6 @@ config.Data.outputDatasetTag = NAME
 config.Data.inputDataset = '/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v3/MINIAODSIM'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 5
-
+config.Data.outLFNDirBase += '/25ns'
+config.JobType.pyCfgParams = ['isTTbarMC=1']
 

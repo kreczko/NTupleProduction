@@ -8,5 +8,6 @@ config.Data.outputDatasetTag = NAME
 config.Data.inputDataset = '/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU30bx50_PHYS14_25_V1-v1/MINIAODSIM'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 5
-
+config.Data.outLFNDirBase += '/PHYS14'
+config.JobType.pyCfgParams = ['isTTbarMC=1']
 

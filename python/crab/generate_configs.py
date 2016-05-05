@@ -38,8 +38,9 @@ def generate_crab_configs():
             extras = ''
 
             file_path = path + '/' + alias + '.py'
-            if 'TTJets' in alias:
+            if 'TTJets' in alias or 'TT_' in alias:
                 unitsPerJob = 5
+                extras = "config.JobType.pyCfgParams = ['isTTbarMC=1']"
             if not 'MINIAODSIM' in dataset:
                 # data
                 unitsPerJob = 500000
