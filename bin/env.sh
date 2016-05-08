@@ -59,10 +59,16 @@ else
    PYTHONPATH=$NTPROOT/python:$PYTHONPATH; export PYTHONPATH
 fi
 
+# for CMSSW
 source /cvmfs/cms.cern.ch/cmsset_default.sh
+export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git
+
+# CRAB submission
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3Releases#Improvements_enhancements_change
 source /cvmfs/cms.cern.ch/crab3/crab_light.sh
-export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git
+
+# for grid tools
+source source /cvmfs/grid.cern.ch/etc/profile.d/setup-cvmfs-ui.sh
 
 unset old_ntpbase
 unset envscript
