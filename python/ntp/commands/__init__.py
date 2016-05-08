@@ -1,4 +1,6 @@
 import os
+import pwd
+import subprocess
 
 
 class Command(object):
@@ -52,3 +54,8 @@ class Command(object):
 
     def __prepare(self, args, variables):
         self.__set_variables(variables)
+        if self.REQUIRE_GRID_CERT:
+            proxy = '/tmp/x509up_u{0}'.format(pwd.getpwuid(os.getuid()).pw_uid)
+            if not os.path.isfile(proxy):
+                subprocess.call(
+                    ['voms-proxy-init', '-voms', 'cms'], shell=True)
