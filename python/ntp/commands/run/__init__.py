@@ -15,6 +15,7 @@
 """
 
 from .. import Command as C
+import subprocess
 
 
 class Command(C):
@@ -30,3 +31,6 @@ class Command(C):
         self.__text = c.get_text()
 
         return result
+
+    def __prepare(self, args, variables):
+        super(Command, self).__prepare(args, variables)
