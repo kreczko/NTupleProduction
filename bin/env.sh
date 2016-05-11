@@ -68,7 +68,7 @@ export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git
 source /cvmfs/cms.cern.ch/crab3/crab_light.sh
 
 # for grid tools
-source source /cvmfs/grid.cern.ch/etc/profile.d/setup-cvmfs-ui.sh
+source /cvmfs/grid.cern.ch/etc/profile.d/setup-cvmfs-ui.sh
 
 unset old_ntpbase
 unset envscript
