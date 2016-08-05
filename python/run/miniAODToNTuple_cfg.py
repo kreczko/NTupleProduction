@@ -458,6 +458,9 @@ process.nTupleElectrons.InputTag = 'electronUserData'
 process.nTupleMuons.InputTag = 'muonUserData'
 process.nTuplePFJets.InputTag = 'jetUserData'
 
+# analysis output
+process.load('BristolAnalysis.NTupleTools.analysis.content_cff')
+process.makingNTuples *= process.globalVariablesElectron*process.analysisTree
 # EDM NTuples
 # process.load('BristolAnalysis.NTupleTools.content')
 #

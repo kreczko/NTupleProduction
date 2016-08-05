@@ -1,8 +1,9 @@
-#include "BristolAnalysis/NTupleTools/plugins/VariableProducer.h"
-#include "FWCore/Framework/interface/Event.h"
-#include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "BristolAnalysis/NTupleTools/interface/PatUtilities.h"
+#include "BristolAnalysis/NTupleTools/plugins/VariableProducer.h"
 #include "DataFormats/Math/interface/angle.h"
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/MessageLogger/interface/MessageLogger.h"
 
 namespace ntp {
 VariableProducer::VariableProducer(const edm::ParameterSet& iConfig) :
@@ -34,8 +35,8 @@ VariableProducer::VariableProducer(const edm::ParameterSet& iConfig) :
 	produces<double>(prefix_ + "MT" + suffix_);
 	produces<double>(prefix_ + "WPT" + suffix_);
 
-	produces<double>(prefix_ + "lepton_eta" + suffix_);
-	produces<double>(prefix_ + "lepton_pt" + suffix_);
+	produces<double>(prefix_ + "leptonEta" + suffix_);
+	produces<double>(prefix_ + "leptonPt" + suffix_);
 
 	produces<unsigned int>(prefix_ + "NJets" + suffix_);
 	produces<unsigned int>(prefix_ + "NBJets" + suffix_);
@@ -73,8 +74,8 @@ void VariableProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
 	iEvent.put(MT, prefix_ + "MT" + suffix_);
 	iEvent.put(WPT, prefix_ + "WPT" + suffix_);
 
-	iEvent.put(leptonEta, prefix_ + "lepton_eta" + suffix_);
-	iEvent.put(leptonPt, prefix_ + "lepton_pt" + suffix_);
+	iEvent.put(leptonEta, prefix_ + "leptonEta" + suffix_);
+	iEvent.put(leptonPt, prefix_ + "leptonPt" + suffix_);
 
 	iEvent.put(nJets, prefix_ + "NJets" + suffix_);
 	iEvent.put(nBJets, prefix_ + "NBJets" + suffix_);
@@ -190,4 +191,5 @@ double VariableProducer::WPT(const LorentzVector& lepton, const pat::MET& met) {
 	LorentzVector W_boson(lepton + met.p4());
 	return W_boson.Pt();
 }
+DEFINE_FWK_MODULE (VariableProducer);
 }
