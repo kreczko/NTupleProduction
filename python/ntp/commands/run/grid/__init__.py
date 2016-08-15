@@ -59,6 +59,7 @@ class Command(C):
             'cd {CMSSW_SRC}',
             'source /cvmfs/cms.cern.ch/cmsset_default.sh',
             'eval `/cvmfs/cms.cern.ch/common/scram runtime -sh`',
+            'source /cvmfs/cms.cern.ch/crab3/crab.sh',
             'crab submit {crab_config}',
         ]
 
