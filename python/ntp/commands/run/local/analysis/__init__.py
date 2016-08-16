@@ -20,11 +20,13 @@
         nevents:  Number of events to process.
                   Default is 1000.
         noop:     'NO OPeration', will not run AnalysisSoftware. Default: false
-        output_file: Name of the output file. Default: ntuple.root
+        output_file: Name of the output file. Default: atOutput.root
 """
 from __future__ import print_function
 import os
 import logging
+import glob
+import shutil
 
 from .. import Command as C
 from ntp.interpreter import time_function
@@ -273,6 +275,11 @@ class Command(C):
                 self.__text += " return code: {code}\n"
                 self.__text = self.__text.format(
                     PSET=PSET, LOGDIR=LOGDIR, code=code)
+                if code == 139:
+                    LOG.warning('########################################################')
+                    LOG.warning('####  Ignoring segault (hopefully) at the end of AS ####')
+                    LOG.warning('########################################################')
+                    return True
                 return False
 
         else:
@@ -318,4 +325,18 @@ class Command(C):
         from ntp.interpreter import call
         code, _, _ = call(
             [all_in_one], LOG, stdout_log_level=logging.INFO, shell=True)
+        self.__move_output_files()
+
         return code
+
+    def __move_output_files(self):
+        output_files = glob.glob(
+            '{CMSSW_SRC}/*.root'.format(CMSSW_SRC=CMSSW_SRC))
+
+        for f in output_files:
+            output_file = self.__output_file
+            if 'tree_' in f:
+                path, filename = os.path.split(output_file)
+                output_file = '{0}/tree_{1}'.format(path, filename)
+            LOG.debug('Moving {0} -> {1}'.format(f, output_file))
+            shutil.move(f, output_file)
