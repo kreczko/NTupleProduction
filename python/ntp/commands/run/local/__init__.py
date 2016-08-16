@@ -36,7 +36,7 @@ from crab.util import find_input_files
 
 LOG = logging.getLogger(__name__)
 PSET = os.path.join(TMPDIR, 'pset.py')
-OUTPUT_FILE = os.path.join(RESULTDIR, 'ntuple.root')
+OUTPUT_FILE = os.path.join(RESULTDIR, '{ds}_ntuple.root')
 BTAG_CALIB_FILE = os.path.join(NTPROOT, 'data/BTagSF/CSVv2.csv')
 
 BASE = """
@@ -69,7 +69,7 @@ class Command(C):
         'nevents': 1000,
         'files': '',
         'noop': False,
-        'output_file': OUTPUT_FILE,
+        'output_file': OUTPUT_FILE.format(ds='TTJets_PowhegPythia8'),
         'pset_template': BASE,
     }
 
@@ -78,11 +78,14 @@ class Command(C):
 
     @time_function('run local', LOG)
     def run(self, args, variables):
+        output_file = None
         if 'output_file' in variables:
             output_file = os.path.join(RESULTDIR, variables['output_file'])
             if not output_file.endswith('.root'):
                 output_file += '.root'
-            variables['output_file'] = output_file
+        else:
+            output_file = OUTPUT_FILE.format(ds=self.__variables['dataset'])
+        variables['output_file'] = output_file
 
         self.__prepare(args, variables)
         campaign = self.__variables['campaign']
