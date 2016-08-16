@@ -219,6 +219,7 @@ class Command(C):
         'noop': False,
         'output_file': OUTPUT_FILE,
         'pset_template': BASE,
+        'mode': 'central',
     }
 
     def __init__(self, path=__file__, doc=__doc__):
@@ -263,7 +264,8 @@ class Command(C):
             self.__variables['isReHLT'] = 1
 
         if not self.__variables['noop']:
-            code = self.__run_analysisSoftware(chosen_dataset, 'central')
+            code = self.__run_analysisSoftware(
+                chosen_dataset, self.__variables['mode'])
             self.__text = "Ran {PSET}\n"
             self.__text += "Logging information can be found in {LOGDIR}/ntp.log\n"
             if code == 0:
@@ -276,9 +278,12 @@ class Command(C):
                 self.__text = self.__text.format(
                     PSET=PSET, LOGDIR=LOGDIR, code=code)
                 if code == 139:
-                    LOG.warning('########################################################')
-                    LOG.warning('####  Ignoring segault (hopefully) at the end of AS ####')
-                    LOG.warning('########################################################')
+                    LOG.warning(
+                        '########################################################')
+                    LOG.warning(
+                        '####  Ignoring segault (hopefully) at the end of AS ####')
+                    LOG.warning(
+                        '########################################################')
                     return True
                 return False
 
@@ -333,10 +338,11 @@ class Command(C):
         output_files = glob.glob(
             '{CMSSW_SRC}/*.root'.format(CMSSW_SRC=CMSSW_SRC))
 
+        output_file = self.__output_file
         for f in output_files:
-            output_file = self.__output_file
             if 'tree_' in f:
-                path, filename = os.path.split(output_file)
-                output_file = '{0}/tree_{1}'.format(path, filename)
-            LOG.debug('Moving {0} -> {1}'.format(f, output_file))
-            shutil.move(f, output_file)
+                LOG.debug('Moving {0} -> {1}'.format(f, output_file))
+                shutil.move(f, output_file)
+            else:
+                LOG.debug('Removing obsolete file: {0}'.format(f))
+                os.remove(f)
