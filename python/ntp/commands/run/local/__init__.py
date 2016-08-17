@@ -92,7 +92,7 @@ class Command(C):
             if not output_file.endswith('.root'):
                 output_file += '.root'
         else:
-            output_file = OUTPUT_FILE.format(ds=self.__variables['dataset'])
+            output_file = OUTPUT_FILE.format(ds=variables['dataset'])
         variables['output_file'] = output_file
 
         self.__prepare(args, variables)
