@@ -308,7 +308,7 @@ class Command(C):
                 dag_man.add_job(job, requires=ntuple_jobs, retry=RETRY_COUNT)
             # layer 2b
             # for each analysis mode create 1 merged file
-            merge_jobs = self.__create_merge_layer(analysis_jobs)
+            merge_jobs = self.__create_merge_layer(analysis_jobs, mode)
             for job in merge_jobs:
                 dag_man.add_job(job, requires=analysis_jobs, retry=2)
 
@@ -364,7 +364,7 @@ class Command(C):
             rel_out_file = os.path.join(rel_out_dir, output_file)
             rel_log_file = os.path.join(rel_log_dir, 'ntp.log')
             job = htc.Job(
-                name='job_{0}'.format(i),
+                name='ntuple_job_{0}'.format(i),
                 args=args,
                 output_files=[rel_out_file, rel_log_file])
             job_set.add_job(job)
@@ -417,7 +417,7 @@ class Command(C):
             rel_out_file = os.path.join(rel_out_dir, output_file)
             rel_log_file = os.path.join(rel_log_dir, 'ntp.log')
             job = htc.Job(
-                name='job_{0}'.format(i),
+                name='analysis_job_{0}'.format(i),
                 args=args,
                 output_files=[rel_out_file, rel_log_file])
             job_set.add_job(job)
@@ -425,7 +425,7 @@ class Command(C):
 
         return jobs
 
-    def __create_merge_layer(self, analysis_jobs):
+    def __create_merge_layer(self, analysis_jobs, mode):
         run_config = self.__config
 
         job_set = htc.JobSet(
@@ -464,7 +464,7 @@ class Command(C):
         rel_log_dir = os.path.relpath(LOGDIR, NTPROOT)
         rel_log_file = os.path.join(rel_log_dir, 'ntp.log')
         job = htc.Job(
-            name='merge',
+            name='{0}_merge_job'.format(mode),
             args=args,
             output_files=[output_file, rel_log_file])
         job_set.add_job(job)
