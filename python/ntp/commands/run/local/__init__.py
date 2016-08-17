@@ -23,6 +23,8 @@
                       Default is 1000.
             noop:     'NO OPeration', will not run CMSSW. Default: false
             output_file: Name of the output file. Default: ntuple.root
+            json_url: URL to JSON file, e.g. https://cms-service-dqm.web.cern.ch/../..._JSON.txt
+                      Default: ''
 """
 from __future__ import print_function
 import os
@@ -58,6 +60,11 @@ process.source.fileNames = cms.untracked.vstring(
 )
 
 process.jetUserData.btagCalibrationFile = cms.string('{BTAG_CALIB_FILE}')
+
+if '{JSON_URL}':
+    import FWCore.PythonUtilities.LumiList as LumiList
+    process.source.lumisToProcess = LumiList.LumiList(url = '{JSON_URL}').getVLuminosityBlockRange()
+
 """
 
 
@@ -71,6 +78,7 @@ class Command(C):
         'noop': False,
         'output_file': OUTPUT_FILE.format(ds='TTJets_PowhegPythia8'),
         'pset_template': BASE,
+        'json_url': '',
     }
 
     def __init__(self, path=__file__, doc=__doc__):
@@ -133,7 +141,8 @@ class Command(C):
                 nevents=nevents,
                 input_files=input_files,
                 OUTPUT_FILE=self.__output_file,
-                BTAG_CALIB_FILE=BTAG_CALIB_FILE
+                BTAG_CALIB_FILE=BTAG_CALIB_FILE,
+                JSON_URL=self.__variables['json_url'],
             )
             f.write(content)
 

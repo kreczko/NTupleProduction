@@ -347,6 +347,8 @@ class Command(C):
             memory='1500MB'
         )
         parameters = 'files={files} output_file={output_file} {params}'
+        if run_config['lumiMask']:
+            parameters += ' json_url={0}'.format(run_config['lumiMask'])
         n_files_per_group = SPLITTING_BY_FILE['DEFAULT']
         for name, value in SPLITTING_BY_FILE.items():
             if name in run_config['inputDataset']:
