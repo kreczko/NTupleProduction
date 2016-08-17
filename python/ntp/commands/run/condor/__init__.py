@@ -417,7 +417,7 @@ class Command(C):
             rel_out_file = os.path.join(rel_out_dir, output_file)
             rel_log_file = os.path.join(rel_log_dir, 'ntp.log')
             job = htc.Job(
-                name='analysis_job_{0}'.format(i),
+                name='analysis_{0}_job_{1}'.format(mode, i),
                 args=args,
                 output_files=[rel_out_file, rel_log_file])
             job_set.add_job(job)
