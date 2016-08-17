@@ -105,6 +105,10 @@ SPLITTING_BY_FILE = {
 }
 
 
+# Analysis jobs: 1 file = 17s processing time
+N_FILES_PER_ANALYSIS_JOB = 50  # ~= 14 min
+
+
 class Command(C):
 
     DEFAULTS = {
@@ -375,6 +379,7 @@ class Command(C):
         jobs = []
         run_config = self.__config
         hdfs_store = run_config['outLFNDirBase'].replace('ntuple', 'atOutput')
+        hdfs_store += '/tmp'
         job_set = htc.JobSet(
             exe=self.__analysis_script,
             copy_exe=True,
@@ -398,17 +403,20 @@ class Command(C):
 
         parameters = 'files={files} output_file={output_file} mode={mode}'
 
-        for i, job in enumerate(ntuple_jobs):
+        input_files = [
+            f.hdfs for job in ntuple_jobs for f in job.output_file_mirrors if f.hdfs.endswith('.root')]
+        n_files_per_group = N_FILES_PER_ANALYSIS_JOB
+        grouped_files = self.__group_files(input_files, n_files_per_group)
+
+        for i, f in enumerate(grouped_files):
             output_file = '{dataset}_atOutput_{mode}_{job_number}.root'.format(
                 dataset=run_config['outputDatasetTag'],
                 mode=mode,
-                job_number=i)
-
-            root_input_files = [
-                f.hdfs for f in job.output_file_mirrors if f.hdfs.endswith('.root')]
+                job_number=i
+            )
 
             args = parameters.format(
-                files=','.join(root_input_files),
+                files=','.join(f),
                 output_file=output_file,
                 mode=mode,
             )
@@ -428,12 +436,13 @@ class Command(C):
     def __create_merge_layer(self, analysis_jobs, mode):
         run_config = self.__config
 
+        hdfs_store = run_config['outLFNDirBase'].replace('ntuple', 'atOutput')
         job_set = htc.JobSet(
             exe=self.__merge_script,
             copy_exe=True,
             setup_script=self.__merge_setup_script,
             filename=os.path.join(
-                self.__job_dir, 'ntuple_merge.condor'),
+                self.__job_dir, 'analysis_merge.condor'),
             out_dir=self.__job_log_dir,
             out_file=LOG_STEM + '.out',
             err_dir=self.__job_log_dir,
@@ -443,7 +452,7 @@ class Command(C):
             share_exe_setup=True,
             common_input_files=self.__input_files,
             transfer_hdfs_input=False,
-            hdfs_store=run_config['outLFNDirBase'],
+            hdfs_store=hdfs_store,
             certificate=self.REQUIRE_GRID_CERT,
             cpus=1,
             memory='1500MB'
