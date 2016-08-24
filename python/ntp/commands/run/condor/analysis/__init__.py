@@ -148,7 +148,7 @@ class Command(C):
         self.__create_folders()
 
         # which dataset, file, etc
-        self.__get_crab_config(campaign, dataset)
+        self.__config = self.__get_crab_config(campaign, dataset)
         self.write_job_files()
         # create DAG for condor
         self.__create_dag()

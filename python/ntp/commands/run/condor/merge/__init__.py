@@ -57,9 +57,50 @@ class Command(C):
 
     def run(self, args, variables):
         self.__prepare(args, variables)
-        self.__text = "NOT IMPLEMENTED"
+
+        campaign = self.__variables['campaign']
+        chosen_dataset = self.__variables['dataset']
+
+        # create tarball
+        self.__create_tar_file(args, variables)
+
+        datasets = [chosen_dataset]
+        if chosen_dataset.lower() == 'all':
+            from crab.datasets import create_sample_list
+            samples = create_sample_list()
+            if campaign in samples:
+                datasets = samples[campaign]
+            else:
+                LOG.error(
+                    'Cannot find datasets for campaign {0}'.format(campaign))
+                return False
+
+        for dataset in datasets:
+            self.__run_dataset(campaign, dataset)
+        # to check status:
+        msg = 'To check the status you can run\n'
+        if len(self.__outdirs) == 1:
+            msg += 'DAGstatus {0}/*.status -s'.format(self.__outdirs[0])
+        else:
+            msg += 'DAGstatus workspace/condor/*/*.status -s'
+        LOG.info(msg)
 
         return True
+
+    def __run_dataset(self, campaign, dataset):
+        self.__set_job_dir(campaign, dataset)
+
+        self.__create_folders()
+
+        # which dataset, file, etc
+        self.__get_crab_config(campaign, dataset)
+        self.write_job_files()
+        # create DAG for condor
+        self.__create_dag()
+
+        if not self.__variables['noop']:
+            self.__dag.submit(force=True)
+            self.__text += "\n Submitted {0} jobs".format(len(self.__dag))
 
     def create_job_layer(self, input_files, mode):
         config = self.__config

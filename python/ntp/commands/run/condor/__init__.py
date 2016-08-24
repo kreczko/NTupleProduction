@@ -124,7 +124,6 @@ class Command(C):
         # which dataset, file, etc
         self.__set_run_config(campaign, dataset)
 
-        self.__write_files()
         # create DAG for condor
         self.__create_dag()
 
@@ -161,16 +160,17 @@ class Command(C):
         self.__input_files.extend(c.get_tar_files())
 
     def __set_run_config(self, campaign, dataset):
-        self.__get_crab_config(campaign, dataset)
-        self.__ntuple.__config = self.__config
-        self.__analysis.__config = self.__config
-        self.__merge.__config = self.__config
+        from copy import deepcopy
+        self.__config = self.__get_crab_config(campaign, dataset)
+        self.__ntuple.__config = deepcopy(self.__config)
+        self.__analysis.__config = deepcopy(self.__config)
+        self.__merge.__config = deepcopy(self.__config)
 
     def __get_crab_config(self, campaign, dataset):
         from crab.util import find_input_files
         from crab import get_config
         from crab.base import __version__ as ntuple_version
-        run_config = {
+        config = {
             'requestName': 'Test',
             'outputDatasetTag': 'Test',
             'inputDataset': 'Test',
@@ -188,23 +188,23 @@ class Command(C):
             campaign, dataset, self.__variables, LOG)
 
         if not using_local_files:
-            run_config = get_config(campaign, dataset)
-            run_config['outLFNDirBase'] = self.__replace_output_dir(run_config)
+            config = get_config(campaign, dataset)
+            config['outLFNDirBase'] = self.__replace_output_dir(config)
 
-        run_config['files'] = input_files
+        config['files'] = input_files
         parameters = self.__extract_params()
-        if run_config['pyCfgParams']:
+        if config['pyCfgParams']:
             params = '{parameters} {cfg_params}'.format(
                 parameters=parameters,
-                cfg_params=' '.join(run_config['pyCfgParams']),
+                cfg_params=' '.join(config['pyCfgParams']),
             )
-            run_config['pyCfgParams'] = params
+            config['pyCfgParams'] = params
         else:
-            run_config['pyCfgParams'] = parameters
+            config['pyCfgParams'] = parameters
 
         LOG.info('Retrieved CRAB config')
 
-        self.__config = run_config
+        return config
 
     def __replace_output_dir(self, run_config):
         output = run_config['outLFNDirBase']
@@ -244,6 +244,7 @@ class Command(C):
 
         # layer 2 - analysis
         from .analysis import ANALYSIS_MODES
+        self.__analysis.__config['files'] = ntuple_output_files
         for mode in ANALYSIS_MODES:
             analysis_jobs = self.__analysis.create_job_layer(
                 ntuple_output_files, mode)
@@ -263,6 +264,8 @@ class Command(C):
                     job, requires=analysis_jobs, retry=MERGE_RETRY_COUNT)
 
         self.__dag = dag_man
+        
+        self.__write_files()
 
     def get_root_output_files(self):
         return self.__root_output_files
