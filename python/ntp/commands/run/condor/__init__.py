@@ -164,6 +164,11 @@ class Command(C):
         self.__config = self.__get_crab_config(campaign, dataset)
         self.__ntuple.__config = deepcopy(self.__config)
         self.__analysis.__config = deepcopy(self.__config)
+        
+        output_dir = self.__config['outLFNDirBase']
+        self.__analysis.__config['outputDir'] = output_dir.replace(
+            'ntuple', 'atOutput'
+        )
         self.__merge.__config = deepcopy(self.__config)
 
     def __get_crab_config(self, campaign, dataset):

@@ -27,6 +27,7 @@
             nevents:  Number of events to process.
                       Default is all (-1).
             test:     Run just one job for testing. Default: false.
+            search_path: path to search for ntuples. Default: not set   
 """
 from __future__ import print_function
 import os
@@ -82,7 +83,6 @@ ANALYSIS_MODES = [
 ]
 
 
-
 # file splitting for datasets containing 'key'
 SPLITTING_BY_FILE = {
     'SingleElectron': 3,
@@ -105,6 +105,7 @@ class Command(C):
         'noop': False,
         'nevents': -1,
         'test': False,
+        'search_path': '',
     }
 
     def __init__(self, path=__file__, doc=__doc__):
@@ -148,8 +149,7 @@ class Command(C):
         self.__create_folders()
 
         # which dataset, file, etc
-        self.__config = self.__get_crab_config(campaign, dataset)
-        self.write_job_files()
+        self.create_config(campaign, dataset)
         # create DAG for condor
         self.__create_dag()
 
@@ -158,6 +158,31 @@ class Command(C):
             self.__text += "\n Submitted {0} jobs".format(len(self.__dag))
 #             for job in self.__dag:
 #                 print(job.name, 'running:', job.manager.exe, ' '.join(job.args))
+
+    def create_config(self, campaign, dataset):
+        self.__config = self.__get_crab_config(campaign, dataset)
+
+        self.__config['unitsPerJob'] = N_FILES_PER_ANALYSIS_JOB
+
+        search_path = self.__variables['search_path']
+        output_dir = self.__config['outLFNDirBase']
+        path = search_path if search_path else output_dir
+        self.__find_ntuple_files(path)
+
+        self.__config['outputDir'] = output_dir.replace(
+            'ntuple', 'atOutput'
+        )
+
+    def __find_ntuple_files(self, path):
+        try_suffixes = ['', 'tmp', 'ntuple_job_*']
+
+        for s in try_suffixes:
+            path = os.path.join(path, s)
+            search_path = os.path.join(path, '*.root')
+            files = glob.glob(search_path)
+            if files:
+                self.__config['files'] = files
+                break
 
     def __set_job_dir(self, campaign, dataset):
         out_dir = os.path.join(CONDOR_ROOT, campaign, dataset, PREFIX)
@@ -193,7 +218,8 @@ class Command(C):
         dag_man = htc.DAGMan(
             filename=dag_file, status_file=dag_status, dot=dot_file,
         )
-        input_files = []  # TODO: glob.glob from expected input directory
+
+        input_files = self.__config['files']
         # layer 2 - analysis
         for mode in ANALYSIS_MODES:
             analysis_jobs = self.create_job_layer(input_files, mode)
@@ -202,6 +228,8 @@ class Command(C):
 
         self.__dag = dag_man
 
+        self.write_job_files()
+
     def create_job_layer(self, input_files, mode):
         jobs = []
         self.__root_output_files = []
@@ -209,8 +237,9 @@ class Command(C):
         config = self.__config
         if self.__variables['test']:
             input_files = [input_files[0]]
+        self.__config['files'] = input_files
 
-        hdfs_store = config['outLFNDirBase'].replace('ntuple', 'atOutput')
+        hdfs_store = config['outputDir']
         job_set = htc.JobSet(
             exe=self.__run_script,
             copy_exe=True,
