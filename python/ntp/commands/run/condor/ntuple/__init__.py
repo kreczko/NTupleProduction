@@ -37,6 +37,7 @@ import logging
 import glob
 
 from .. import Command as C
+from .. import HDFS_STORE_BASE
 from crab.util import get_files
 from ntp import NTPROOT
 from ntp.commands.setup import WORKSPACE, LOGDIR, CACHEDIR, RESULTDIR
@@ -49,12 +50,9 @@ try:
 except:
     LOG.error('Could not import htcondenser')
 
-
 CONDOR_ROOT = os.path.join(WORKSPACE, 'condor')
-HDFS_STORE_BASE = "/hdfs/TopQuarkGroup/{user}".format(
-    user=getpass.getuser())
-
 RETRY_COUNT = 10
+PREFIX = __name__.split('.')[-1]
 
 SETUP_SCRIPT = """
 tar -xf ntp.tar.gz
@@ -68,15 +66,15 @@ ntp run local $@ nevents=-1
 
 """
 
-MERGE_SETUP_SCRIPT = """
-tar -xf ntp.tar.gz
-source bin/env.sh
-ntp setup from_tarball=cmssw_src.tar.gz compile=0
-
-"""
+SETUP_SCRIPT_FILE = '{0}_setup.sh'.format(PREFIX)
+RUN_SCRIPT_FILE = '{0}_run.sh'.format(PREFIX)
+CONFIG_FILE = '{0}_config.json'.format(PREFIX)
 
 
-LOG_STEM = 'ntp_job.$(cluster).$(process)'
+LOG_STEM = '{0}_job.$(cluster).$(process)'.format(PREFIX)
+OUT_FILE = LOG_STEM + '.out'
+ERR_FILE = LOG_STEM + '.err'
+LOG_FILE = LOG_STEM + '.log'
 
 # file splitting for datasets containing 'key'
 SPLITTING_BY_FILE = {
@@ -101,8 +99,6 @@ class Command(C):
 
     def __init__(self, path=__file__, doc=__doc__):
         super(Command, self).__init__(path, doc)
-        self.__input_files = []
-        self.__outdirs = []
 
     def run(self, args, variables):
         self.__prepare(args, variables)
@@ -129,22 +125,22 @@ class Command(C):
         # to check status:
         msg = 'To check the status you can run\n'
         if len(self.__outdirs) == 1:
-            msg += 'DAGstatus {0}/diamond.status -s'.format(self.__outdirs[0])
+            msg += 'DAGstatus {0}/*.status -s'.format(self.__outdirs[0])
         else:
-            msg += 'DAGstatus workspace/condor/*/diamond.status -s'
+            msg += 'DAGstatus workspace/condor/*/*.status -s'
         LOG.info(msg)
         # ntp condor status
 
         return True
 
     def __run_dataset(self, campaign, dataset):
-        self.__set_job_dirs(campaign, dataset)
+        self.__set_job_dir(campaign, dataset)
 
         self.__create_folders()
 
         # which dataset, file, etc
-        self.__get_run_config(campaign, dataset)
-        self.__write_files()
+        self.__get_crab_config(campaign, dataset)
+        self.write_job_files()
         # create DAG for condor
         self.__create_dag()
 
@@ -152,88 +148,22 @@ class Command(C):
             self.__dag.submit(force=True)
             self.__text += "\n Submitted {0} jobs".format(len(self.__dag))
 
-    def __set_job_dirs(self, campaign, dataset):
-        out_dir = os.path.join(CONDOR_ROOT, campaign, dataset)
+    def __set_job_dir(self, campaign, dataset):
+        out_dir = os.path.join(CONDOR_ROOT, campaign, dataset, PREFIX)
+        out_dir = self.__get_latest_outdir(out_dir)
 
-        existing_dirs = glob.glob(out_dir + '_*')
-        latest = 1
-        if existing_dirs:
-            latest = find_latest_iteration(existing_dirs)
-            latest += 1
-        out_dir += '_{0}'.format(latest)
+        self.set_job_dir(out_dir)
 
-        self.__job_dir = out_dir
-        self.__outdirs.append(out_dir)
+    def set_job_dir(self, job_dir):
+        self.__job_dir = job_dir
+        self.__outdirs.append(job_dir)
         self.__job_log_dir = os.path.join(self.__job_dir, 'log')
-        self.__setup_script = os.path.join(self.__job_dir, 'setup.sh')
-        self.__run_script = os.path.join(self.__job_dir, 'run.sh')
-        self.__run_config = os.path.join(self.__job_dir, 'config.json')
 
-    def __create_folders(self):
-        dirs = [CONDOR_ROOT, self.__job_dir, self.__job_log_dir]
-        for d in dirs:
-            if not os.path.exists(d):
-                os.makedirs(d)
+        self.__setup_script = os.path.join(self.__job_dir, SETUP_SCRIPT_FILE)
+        self.__run_script = os.path.join(self.__job_dir, RUN_SCRIPT_FILE)
+        self.__run_config = os.path.join(self.__job_dir, CONFIG_FILE)
 
-    def __create_tar_file(self, args, variables):
-        from ntp.commands.create.tarball import Command as TarCommand
-        c = TarCommand()
-        c.run(args, variables)
-        self.__text += c.__text
-        self.__input_files.extend(c.get_tar_files())
-
-    def __get_run_config(self, campaign, dataset):
-        from crab.util import find_input_files
-        from crab import get_config
-        run_config = {
-            'requestName': 'Test',
-            'outputDatasetTag': 'Test',
-            'inputDataset': 'Test',
-            'splitting': 'FileBased',
-            'unitsPerJob': 1,
-            'outLFNDirBase': os.path.join(HDFS_STORE_BASE, 'ntuple'),
-            'lumiMask': '',
-            'pyCfgParams': None,
-            'files': [],
-        }
-
-        using_local_files = self.__variables['files'] != ''
-        input_files = find_input_files(
-            campaign, dataset, self.__variables, LOG)
-
-        if not using_local_files:
-            run_config = get_config(campaign, dataset)
-            run_config['outLFNDirBase'] = self.__replace_output_dir(run_config)
-
-        run_config['files'] = input_files
-        parameters = self.__extract_params()
-        if run_config['pyCfgParams']:
-            params = '{parameters} {cfg_params}'.format(
-                parameters=parameters,
-                cfg_params=' '.join(run_config['pyCfgParams']),
-            )
-            run_config['pyCfgParams'] = params
-        else:
-            run_config['pyCfgParams'] = parameters
-
-        LOG.info('Retrieved CRAB config')
-
-        self.__config = run_config
-
-    def __replace_output_dir(self, run_config):
-        output = run_config['outLFNDirBase']
-        LOG.debug('Replacing output directory {0}'.format(output))
-        if output.startswith('/store/user'):
-            tokens = output.split('/')
-            base = '/'.join(tokens[4:])
-            LOG.debug('Taking base of {0}'.format(base))
-            LOG.debug('and replacing with {0}'.format(HDFS_STORE_BASE))
-            output = os.path.join(HDFS_STORE_BASE, base)
-            output = os.path.join(output, run_config['outputDatasetTag'])
-            LOG.debug('Final output directory: {0}'.format(output))
-        return output
-
-    def __write_files(self):
+    def write_job_files(self):
         with open(self.__setup_script, 'w+') as f:
             f.write(SETUP_SCRIPT)
 
@@ -246,24 +176,25 @@ class Command(C):
 
     def __create_dag(self):
         """ Creates a Directional Acyclic Grag (DAG) for condor """
+        dag_file = os.path.join(self.__job_dir, '{0}.dag'.format(PREFIX))
+        dag_status = os.path.join(self.__job_dir, '{0}.status'.format(PREFIX))
+        dot_file = '{0}.dot'.format(PREFIX)
         dag_man = htc.DAGMan(
-            filename=os.path.join(self.__job_dir, 'diamond.dag'),
-            status_file=os.path.join(self.__job_dir, 'diamond.status'),
-            dot='diamond.dot'
+            filename=dag_file, status_file=dag_status, dot=dot_file,
         )
 
         # layer 1 - ntuples
-        ntuple_jobs = self.__create_ntuple_layer()
+        ntuple_jobs = self.create_job_layer(self.__config['files'])
         for job in ntuple_jobs:
             dag_man.add_job(job, retry=RETRY_COUNT)
 
         self.__dag = dag_man
 
-    def __create_ntuple_layer(self):
+    def create_job_layer(self, input_files):
         jobs = []
+        self.__root_output_files = []
 
         run_config = self.__config
-        input_files = run_config['files']
         if self.__variables['test']:
             input_files = [input_files[0]]
 
@@ -271,14 +202,13 @@ class Command(C):
             exe=self.__run_script,
             copy_exe=True,
             setup_script=self.__setup_script,
-            filename=os.path.join(
-                self.__job_dir, 'ntuple_production.condor'),
+            filename=os.path.join(self.__job_dir, '{0}.condor'.format(PREFIX)),
             out_dir=self.__job_log_dir,
-            out_file=LOG_STEM + '.out',
+            out_file=OUT_FILE,
             err_dir=self.__job_log_dir,
-            err_file=LOG_STEM + '.err',
+            err_file=ERR_FILE,
             log_dir=self.__job_log_dir,
-            log_file=LOG_STEM + '.log',
+            log_file=LOG_FILE,
             share_exe_setup=True,
             common_input_files=self.__input_files,
             transfer_hdfs_input=False,
@@ -295,12 +225,13 @@ class Command(C):
             if name in run_config['inputDataset']:
                 n_files_per_group = value
 
-        grouped_files = make_even_chunks(
-            input_files, n_files_per_group)
+        grouped_files = make_even_chunks(input_files, n_files_per_group)
         for i, f in enumerate(grouped_files):
-            output_file = '{dataset}_ntuple_{job_number}.root'.format(
+            output_file = '{dataset}_{PREFIX}_{job_number}.root'.format(
                 dataset=run_config['outputDatasetTag'],
-                job_number=i)
+                PREFIX=PREFIX,
+                job_number=i,
+            )
             args = parameters.format(
                 files=','.join(f),
                 output_file=output_file,
@@ -311,9 +242,14 @@ class Command(C):
             rel_out_file = os.path.join(rel_out_dir, output_file)
             rel_log_file = os.path.join(rel_log_dir, 'ntp.log')
             job = htc.Job(
-                name='ntuple_job_{0}'.format(i),
+                name='{0}_job_{1}'.format(PREFIX, i),
                 args=args,
                 output_files=[rel_out_file, rel_log_file])
             job_set.add_job(job)
             jobs.append(job)
+
+            output_files = [f.hdfs for f in job.output_file_mirrors]
+            root_files = [f for f in output_files if f.endswith('.root')]
+            self.__output_files.extend(output_files)
+            self.__root_output_files.extend(root_files)
         return jobs
