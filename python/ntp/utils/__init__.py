@@ -20,9 +20,10 @@ def find_latest_iteration(directories):
         of directories.
         Expects a list of directories of the form
         <path>/<name>_<number>
-        and will return the directory with the highest number
+        and will return the directory with the highest number.
+        Will return 0 if no directories are given.
     """
-    numbers = []
+    numbers = [0]
     for d in directories:
         number = int(d.split('_')[-1])
         numbers.append(number)
