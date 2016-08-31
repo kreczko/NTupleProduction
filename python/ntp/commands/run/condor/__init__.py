@@ -25,7 +25,6 @@
 """
 from __future__ import print_function
 import os
-import getpass
 import logging
 import glob
 
@@ -34,6 +33,7 @@ from crab.util import get_files
 from ntp import NTPROOT
 from ntp.commands.setup import WORKSPACE, LOGDIR, CACHEDIR, RESULTDIR
 from ntp.utils import find_latest_iteration
+from ntp.utils.hdfs import HDFS_STORE_BASE
 
 
 LOG = logging.getLogger(__name__)
@@ -45,10 +45,6 @@ except:
 
 CONDOR_ROOT = os.path.join(WORKSPACE, 'condor')
 LOG_STEM = 'ntp_job.$(cluster).$(process)'
-HDFS_STORE_BASE = "/hdfs/TopQuarkGroup/{user}".format(
-    user=getpass.getuser()
-)
-
 
 class Command(C):
 

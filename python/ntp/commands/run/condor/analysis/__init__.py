@@ -36,7 +36,7 @@ import logging
 import glob
 
 from .. import Command as C
-from .. import HDFS_STORE_BASE
+from ntp.utils.hdfs import HDFS_STORE_BASE
 from crab.util import get_files
 from ntp import NTPROOT
 from ntp.commands.setup import WORKSPACE, LOGDIR, CACHEDIR, RESULTDIR
