@@ -1,5 +1,5 @@
 """
-    run condor: Runs the n-tuple production on the a condor batch system.
+    run condor analysis: Runs the n-tuple production on the a condor batch system.
                 All run commands require a valid grid certificate as they
                 either read data from the grid via XRootD or run on grid
                 resources.
@@ -7,7 +7,7 @@
                 All unknown parameters will be bassed to 'ntp run local'
                 inside the condor job.
         Usage:
-            run condor [campaign=<X>]  [dataset=<X>] [file=<path>]
+            run condor analysis [campaign=<X>]  [dataset=<X>] [file=<path>]
 
         Parameters:
             campaign: which campaign to run. Corresponds to the folder
@@ -61,7 +61,7 @@ ntp setup from_tarball=cmssw_src.tar.gz
 """
 
 RUN_SCRIPT = """
-ntp run local analysis $@ nevents=0
+ntp run analysis $@ nevents=0
 
 """
 

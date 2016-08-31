@@ -1,10 +1,10 @@
 """
-    run condor analysis:
+    run analysis:
         Runs the ntuple based analysis code (AnalysisSoftware) to produce the
         final set of trees.
         
     Usage:
-        run local analysis dataset=<data set> campaign=<campaign>
+        run analysis dataset=<data set> campaign=<campaign>
         
     Parameters:
         campaign: which campaign to run. Corresponds to the folder
