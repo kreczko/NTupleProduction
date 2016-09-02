@@ -71,7 +71,7 @@ class Command(C):
     def run(self, args, variables):
         # sub commands
         from .ntuple import Command as NTupleCommand
-        from .analysis import Command as AnalysisCommand
+        from ..analysis.DICE import Command as AnalysisCommand
         from .merge import Command as MergeCommand
         self.__ntuple = NTupleCommand()
         self.__analysis = AnalysisCommand()

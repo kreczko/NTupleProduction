@@ -1,33 +1,6 @@
 """
-    run condor analysis: Runs the n-tuple production on the a condor batch system.
-                All run commands require a valid grid certificate as they
-                either read data from the grid via XRootD or run on grid
-                resources.
-                The command will use python/run/miniAODToNTuple_cfg.py.
-                All unknown parameters will be bassed to 'ntp run local'
-                inside the condor job.
-        Usage:
-            run condor analysis [campaign=<X>]  [dataset=<X>] [file=<path>]
-
-        Parameters:
-            campaign: which campaign to run. Corresponds to the folder
-                      structure in crab/*
-                      Default is 'Spring16'.
-            dataset:  Alias for the single dataset you want to run over. Corresponds
-                      to the file names (without extension) in crab/*/*.py.
-                      Accepts wild-cards and comma-separated lists.
-                      Default is 'TTJets_PowhegPythia8'.
-                      Special value 'all' will submit all datasets for a given
-                      campaign.
-                      This parameter is ignored if parameter file is given.
-            files:    Instead of running on a specific dataset, run over the
-                      given (comma-separated) list of files
-            noop:     'NO OPeration', will do everything except submitting jobs.
-                      Default: false
-            nevents:  Number of events to process.
-                      Default is all (-1).
-            test:     Run just one job for testing. Default: false.
-            search_path: path to search for ntuples. Default: not set   
+    run analysis where=DICE:
+        Runs the analysis in the Data Intensive Computing Environment
 """
 from __future__ import print_function
 import os
@@ -41,6 +14,7 @@ from crab.util import get_files
 from ntp import NTPROOT
 from ntp.commands.setup import WORKSPACE, LOGDIR, CACHEDIR, RESULTDIR
 from ntp.utils import make_even_chunks, find_latest_iteration
+from . import ANALYSIS_MODES
 
 LOG = logging.getLogger(__name__)
 
@@ -61,7 +35,7 @@ ntp setup from_tarball=cmssw_src.tar.gz
 """
 
 RUN_SCRIPT = """
-ntp run analysis $@ nevents=0
+ntp run analysis where=local $@ nevents=0
 
 """
 
@@ -73,14 +47,6 @@ LOG_STEM = '{0}_job.$(cluster).$(process)'.format(PREFIX)
 OUT_FILE = LOG_STEM + '.out'
 ERR_FILE = LOG_STEM + '.err'
 LOG_FILE = LOG_STEM + '.log'
-
-ANALYSIS_MODES = [
-    'central',
-    'JES_down',
-    'JES_up',
-    'JetSmearing_down',
-    'JetSmearing_up',
-]
 
 
 # file splitting for datasets containing 'key'

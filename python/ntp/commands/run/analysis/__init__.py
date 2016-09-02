@@ -4,12 +4,10 @@
         final set of trees.
         
     Usage:
-        run analysis dataset=<data set> campaign=<campaign>
+        run analysis dataset=<data set> [files=<f1,f2,..>]
+                    [nevents=1000] [noop=0] [output_file=atOutput.root]
         
     Parameters:
-        campaign: which campaign to run. Corresponds to the folder
-                  structure in crab/*
-                  Default is 'Test'.
         dataset:  Alias for the single dataset you want to run over. Corresponds
                   to the file names (without extension) in crab/*/*.py.
                   Accepts wild-cards and comma-separated lists.
@@ -21,6 +19,8 @@
                   Default is 1000.
         noop:     'NO OPeration', will not run AnalysisSoftware. Default: false
         output_file: Name of the output file. Default: atOutput.root
+        where:    Where to run the analysis. Can be 'local|DICE'.
+                  Default is 'local'.
 """
 from __future__ import print_function
 import os
@@ -35,9 +35,18 @@ from ntp.commands.setup import CMSSW_SRC, TMPDIR, RESULTDIR, LOGDIR
 from crab.util import find_input_files
 
 BAT_BASE = os.path.join(CMSSW_SRC, 'BristolAnalysis', 'Tools')
+BAT_PYTHON = os.path.join(BAT_BASE, 'python')
 LOG = logging.getLogger(__name__)
 PSET = os.path.join(TMPDIR, 'bat.py')
 OUTPUT_FILE = os.path.join(RESULTDIR, 'atOutput.root')
+
+ANALYSIS_MODES = [
+    'central',
+    'JES_down',
+    'JES_up',
+    'JetSmearing_down',
+    'JetSmearing_up',
+]
 
 BASE = """
 import os
@@ -210,9 +219,14 @@ nTuple_version = 0
 
 
 class Command(C):
+    #     """
+    #         This command is used for input file discovery & steering of anlysis
+    #         jobs. Once all arguments and parameters are passed this commands calls
+    #         one of its sub-commands, local or DICE, to execute the job in the
+    #         correct environment.
+    #     """
 
     DEFAULTS = {
-        'campaign': 'Test',
         'dataset': 'TTJets_PowhegPythia8',
         'nevents': 1000,
         'files': '',
@@ -220,6 +234,7 @@ class Command(C):
         'output_file': OUTPUT_FILE,
         'pset_template': BASE,
         'mode': 'central',
+        'where': 'local',
     }
 
     def __init__(self, path=__file__, doc=__doc__):
@@ -227,20 +242,13 @@ class Command(C):
 
     @time_function('run local', LOG)
     def run(self, args, variables):
-        if 'output_file' in variables:
-            output_file = os.path.join(RESULTDIR, variables['output_file'])
-            if not output_file.endswith('.root'):
-                output_file += '.root'
-            variables['output_file'] = output_file
+        self.__add_output_file(variables)
 
         self.__prepare(args, variables)
-#         campaign = self.__variables['campaign']
         chosen_dataset = self.__variables['dataset']
-#         from BristolAnalysis.Tools.analysis_info import datasets_13TeV
-        bat_path = '{0}/BristolAnalysis/Tools/python'.format(CMSSW_SRC)
         from imp import load_source
         analysis_info = load_source(
-            'analysis_info', bat_path + '/analysis_info.py')
+            'analysis_info', BAT_PYTHON + '/analysis_info.py')
         datasets_13TeV = analysis_info.datasets_13TeV
         if not chosen_dataset in datasets_13TeV and variables['files'] == "":
             LOG.error('Cannot find dataset {0}'.format(chosen_dataset))
@@ -255,94 +263,63 @@ class Command(C):
         LOG.debug(
             "Using files for NTP input:\n{0}".format('\n'.join(input_files)))
 
-        self.__output_file = self.__variables['output_file']
+        self.__variables['input_files'] = input_files
 
-        self.__write_pset(input_files)
+        return self.__run_payload()
 
-        # making sure the correct HLT menu is read
-        if 'reHLT' in input_files[0]:
-            self.__variables['isReHLT'] = 1
+    def __add_output_file(self, variables):
+        if 'output_file' in variables:
+            output_file = os.path.join(RESULTDIR, variables['output_file'])
+            if not output_file.endswith('.root'):
+                output_file += '.root'
+            variables['output_file'] = output_file
 
-        if not self.__variables['noop']:
-            code = self.__run_analysisSoftware(
-                chosen_dataset, self.__variables['mode'])
-            self.__text = "Ran {PSET}\n"
-            self.__text += "Logging information can be found in {LOGDIR}/ntp.log\n"
-            if code == 0:
-                self.__text += "Created atOutput: {OUTPUT_FILE}\n"
-                self.__text = self.__text.format(
-                    PSET=PSET, LOGDIR=LOGDIR, OUTPUT_FILE=self.__output_file)
-            else:
-                self.__text += "BAT experienced an error,"
-                self.__text += " return code: {code}\n"
-                self.__text = self.__text.format(
-                    PSET=PSET, LOGDIR=LOGDIR, code=code)
-                if code == 139:
-                    LOG.warning(
-                        '########################################################')
-                    LOG.warning(
-                        '####  Ignoring segault (hopefully) at the end of AS ####')
-                    LOG.warning(
-                        '########################################################')
-                    return True
-                return False
-
+    def __add_input_files(self):
+        input_files = []
+        path = self.__variables['files']
+        dataset = self.__variables['dataset']
+        if path != '':
+            input_files = self.input_files_from_path(path)
         else:
-            LOG.info('Found "noop", not running CMSSW')
+            input_files = self.input_files_from_dataset(dataset)
+        self.__variables['input_files'] = input_files
 
+    def input_files_from_path(self, path):
+        """
+            Converts given path(s) to input files. 
+        """
+        if ',' in path:
+            input_files = path.split(',')
+        elif '*' in path:
+            input_files = glob.glob(path)
+        else:  # neither wildcard nor comma separated list
+            input_files = [path]
+        input_files = [os.path.abspath(f) for f in input_files]
+        return [f for f in input_files if os.path.exists(f)]
+
+    def input_files_from_dataset(self, dataset):
+        analysis_info_file = os.path.join(BAT_PYTHON, 'analysis_info.py')
+        from imp import load_source
+        analysis_info = load_source('analysis_info', analysis_info_file)
+
+        datasets = analysis_info.datasets_13TeV
+        if not dataset in datasets_13TeV:
+            msg = 'Cannot find dataset {0}'.format(dataset)
+            LOG.error(msg)
+            import sys
+            sys.exit(msg)
+        paths = [os.path.join(p, '*.root') for p in datasets_13TeV[dataset]]
+        return self.input_files_from_path(path)
+
+    def __run_payload(self):
+        # TODO: add checking/dynamic subcommand discovery
+        if self.__variables['where'] == 'local':
+            from .local import Command as PayLoad
+        else:
+            from .DICE import Command as PayLoad
+
+        payload = PayLoad()
+        return payload.run([], self.__variables)
+
+    def __can_run(self):
         return True
-
-    def __write_pset(self, input_files):
-        nevents = int(self.__variables['nevents'])
-        input_files = self.__format_input_files(input_files)
-
-        with open(PSET, 'w+') as f:
-            content = self.__variables['pset_template'].format(
-                nevents=nevents,
-                input_files=input_files,
-                BAT_BASE=BAT_BASE,
-                maxEvents=nevents,
-                mode='central',
-                dataset=self.__variables['dataset'],
-                #                 OUTPUT_FILE=self.__output_file,
-            )
-            f.write(content)
-
-    @time_function('__run_analysisSoftware', LOG)
-    def __run_analysisSoftware(self, dataset, mode):
-        commands = [
-            'cd {CMSSW_SRC}',
-            'source /cvmfs/cms.cern.ch/cmsset_default.sh',
-            'eval `/cvmfs/cms.cern.ch/common/scram runtime -sh`',
-            'sample="{dataset}" analysisMode="{mode}" BAT {PSET} {params}',
-        ]
-
-        all_in_one = ' && '.join(commands)
-        all_in_one = all_in_one.format(
-            CMSSW_SRC=CMSSW_SRC,
-            dataset=dataset,
-            mode=mode,
-            PSET=PSET,
-            params=self.__extract_params()
-        )
-
-        LOG.info("Executing BAT")
-        from ntp.interpreter import call
-        code, _, _ = call(
-            [all_in_one], LOG, stdout_log_level=logging.INFO, shell=True)
-        self.__move_output_files()
-
-        return code
-
-    def __move_output_files(self):
-        output_files = glob.glob(
-            '{CMSSW_SRC}/*.root'.format(CMSSW_SRC=CMSSW_SRC))
-
-        output_file = self.__output_file
-        for f in output_files:
-            if 'tree_' in f:
-                LOG.debug('Moving {0} -> {1}'.format(f, output_file))
-                shutil.move(f, output_file)
-            else:
-                LOG.debug('Removing obsolete file: {0}'.format(f))
-                os.remove(f)
