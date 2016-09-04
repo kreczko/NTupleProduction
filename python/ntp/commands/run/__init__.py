@@ -16,6 +16,8 @@
 
 from .. import Command as C
 import subprocess
+import os
+from ..setup import WORKSPACE
 CONDOR_ROOT = os.path.join(WORKSPACE, 'condor')
 
 
@@ -45,12 +47,12 @@ class Command(C):
     def __prepare(self, args, variables):
         super(Command, self).__prepare(args, variables)
 
-    def __extract_params(self):
+    def __extract_params(self, prefix='', skip=[]):
         args = []
         for var, value in self.__variables.items():
-            if var in self.DEFAULTS:
+            if var in self.DEFAULTS or var in skip:
                 continue
-            args.append('{0}={1}'.format(var, value))
+            args.append('{0}{1}={2}'.format(prefix, var, value))
         return ' '.join(args)
 
     def __format_input_files(self, input_files):
@@ -79,7 +81,7 @@ class Command(C):
 
     def set_condor_job_directory(self, directory):
         self.__job_dir = directory
-        self.__outdirs.append(job_dir)
+        self.__outdirs.append(directory)
         self.__job_log_dir = os.path.join(directory, 'log')
         self.__setup_script = os.path.join(directory, self.__setup_script)
         self.__run_script = os.path.join(directory, self.__run_script)
@@ -87,6 +89,7 @@ class Command(C):
 
     def __get_latest_outdir(self, out_dir):
         from ntp.utils import find_latest_iteration
+        import glob
         existing_dirs = glob.glob(out_dir + '_*')
         latest = 1
         if existing_dirs:
