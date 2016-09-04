@@ -1,5 +1,6 @@
 """
     A small collections of functions that are useful in more than one place.
+    All of this should move to DailyPythonScripts.
 """
 
 def make_even_chunks(list_of_things, n_chunks):
