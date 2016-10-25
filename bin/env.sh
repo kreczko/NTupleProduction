@@ -111,6 +111,9 @@ if [ ! -d "${TOPQ_CONDA_PATH}" ] ; then
 	conda clean -t -y
   # give the group write access
   chmod g+r -R ${TOPQ_CONDA_PATH}
+  # Clear the PYTHONPATH
+  source deactivate
+  source activate ntp
 else
   echo "Found conda install in ${TOPQ_CONDA_PATH}, activating..."
 	PATH=${TOPQ_CONDA_PATH}/bin:$PATH; export PATH
